@@ -6,7 +6,7 @@ export default class Auth {
 	 * @param {string} token
 	 */
 	static authenticateUser(token) {
-		localStorage.setItem('token', token);
+		// Authentication bypassed - no token needed
 	}
 
 	/**
@@ -15,7 +15,8 @@ export default class Auth {
 	 * @returns {boolean}
 	 */
 	static isUserAuthenticated() {
-		return localStorage.getItem('token') !== null;
+		// Always return true since authentication is bypassed
+		return true;
 	}
 
 	/**
@@ -23,7 +24,7 @@ export default class Auth {
 	 *
 	 */
 	static deauthenticateUser() {
-		localStorage.removeItem('token');
+		// Authentication bypassed - no token to remove
 	}
 
 	/**
@@ -33,6 +34,7 @@ export default class Auth {
 	 */
 
 	static getToken() {
-		return localStorage.getItem('token');
+		// Return empty string since authentication is bypassed
+		return '';
 	}
 }

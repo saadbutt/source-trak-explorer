@@ -12,7 +12,6 @@ export const post = (uri, payload) =>
 			.post(uri)
 			.send(payload)
 			.set('Accept', 'application/json')
-			.set('Authorization', `bearer ${Auth.getToken()}`)
 			.end(withPromiseCallback(resolve, reject));
 	});
 export const get = uri =>
@@ -20,7 +19,6 @@ export const get = uri =>
 		agent
 			.get(uri)
 			.set('Accept', 'application/json')
-			.set('Authorization', `bearer ${Auth.getToken()}`)
 			.set('Cache-Control', 'no-cache')
 			.end(withPromiseCallback(resolve, reject));
 	});
@@ -30,7 +28,6 @@ export const put = (uri, payload) =>
 			.put(uri)
 			.send(payload)
 			.set('Accept', 'application/json')
-			.set('Authorization', `bearer ${Auth.getToken()}`)
 			.end(withPromiseCallback(resolve, reject));
 	});
 export const deleteRequest = (uri, payload) =>
@@ -39,15 +36,11 @@ export const deleteRequest = (uri, payload) =>
 			.delete(uri)
 			.send(payload)
 			.set('Accept', 'application/json')
-			.set('Authorization', `bearer ${Auth.getToken()}`)
 			.end(withPromiseCallback(resolve, reject));
 	});
 export const withPromiseCallback = (resolve, reject) => (error, response) => {
 	if (error) {
 		console.error(error);
-		if (response && response.status === 401) {
-			Auth.deauthenticateUser();
-		}
 		reject({ error });
 	} else {
 		resolve(response.body);

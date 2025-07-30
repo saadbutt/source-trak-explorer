@@ -35,7 +35,7 @@ import { chartOperations, chartSelectors } from '../../state/redux/charts';
 import { tableOperations, tableSelectors } from '../../state/redux/tables';
 import { themeSelectors } from '../../state/redux/theme';
 import UsersPanal from '../UsersPanal/UsersPanal';
-import { authOperations } from '../../state/redux/auth';
+// Removed authOperations import since authentication is bypassed
 
 // import Enroll from '../Enroll';
 
@@ -202,20 +202,7 @@ const styles = theme => {
 			},
 			fontSize: '18pt'
 		},
-		logout: {
-			fontSize: '18pt',
-			margin: 8
-		},
-		logoutIcon: {
-			color: dark ? 'rgb(139, 143, 148)' : '#5f6164',
-			fontSize: '16pt',
-			float: 'none',
-			'&:hover': {
-				color: dark ? '#c1d7f0' : '#24272a'
-			},
-			margin: '8px',
-			cursor: 'pointer'
-		},
+		// Removed logout styles since authentication is bypassed
 		userIcon: {
 			color: dark ? 'rgb(139, 143, 148)' : '#5f6164',
 			fontSize: '16pt',
@@ -389,12 +376,7 @@ export class HeaderView extends Component {
 		this.registerClose();
 	};
 
-	logout = async () => {
-		const result = await this.props.logout();
-		if (result.status === 'Success') {
-			window.location = '/';
-		}
-	};
+	// Removed logout functionality since authentication is bypassed
 
 	/**enrollOpen = () => {
     this.setState(() => ({ enrollOpen: true }));
@@ -627,11 +609,7 @@ export class HeaderView extends Component {
 													</div>
 												</DropdownItem>
 												<DropdownItem divider />
-												<DropdownItem>
-													<div className={classes.logoutIcon} onClick={() => this.logout()}>
-														<FontAwesome name="sign-out" /> Sign out
-													</div>
-												</DropdownItem>
+												{/* Removed logout dropdown item since authentication is bypassed */}
 											</DropdownMenu>
 										</Dropdown>
 									</Form>
@@ -734,8 +712,8 @@ const mapDispatchToProps = {
 	getTransactionList: transactionList,
 	getTransactionListSearch: transactionListSearch,
 	getTransactionPerHour: transactionPerHour,
-	getTransactionPerMin: transactionPerMin,
-	logout: authOperations.logout
+	getTransactionPerMin: transactionPerMin
+	// Removed logout mapping since authentication is bypassed
 };
 
 const connectedComponent = connect(
