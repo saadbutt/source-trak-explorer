@@ -44,7 +44,7 @@ export class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			loading: true
+			loading: false // Set loading to false to skip the loading screen
 		};
 	}
 
@@ -62,6 +62,7 @@ export class App extends Component {
 	render() {
 		const { auth } = this.props;
 		const { loading } = this.state;
+		// Skip loading screen since authentication is bypassed
 		if (auth && loading) {
 			return <LandingPage updateLoadStatus={this.updateLoadStatus} />;
 		}

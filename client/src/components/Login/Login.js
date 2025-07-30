@@ -204,7 +204,7 @@ export class Login extends Component {
 						<LockOutlinedIcon />
 					</Avatar>
 					<Typography component="h5" variant="headline">
-						Sign in
+						LOG in
 					</Typography>
 					<form className={classes.form} onSubmit={this.submitForm}>
 						<FormControl margin="normal" required fullWidth>
