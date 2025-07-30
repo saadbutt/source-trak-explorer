@@ -245,18 +245,23 @@ export class HeaderView extends Component {
 		const { channels: channelArr, currentChannel } = this.props;
 		const arr = [];
 		let selectedValue = {};
-		channelArr.forEach(element => {
-			if (element.channel_genesis_hash === currentChannel) {
-				selectedValue = {
+		
+		// Add null check to prevent forEach error when channels is undefined
+		if (channelArr && Array.isArray(channelArr)) {
+			channelArr.forEach(element => {
+				if (element.channel_genesis_hash === currentChannel) {
+					selectedValue = {
+						value: element.channel_genesis_hash,
+						label: element.channelname
+					};
+				}
+				arr.push({
 					value: element.channel_genesis_hash,
 					label: element.channelname
-				};
-			}
-			arr.push({
-				value: element.channel_genesis_hash,
-				label: element.channelname
+				});
 			});
-		});
+		}
+		
 		this.setState({
 			currentChannel: currentChannel,
 			channels: arr,
@@ -264,9 +269,12 @@ export class HeaderView extends Component {
 			selectedChannel: selectedValue
 		});
 
-		this.interVal = setInterval(() => {
-			this.syncData(currentChannel);
-		}, 60000);
+		// Only set up interval if we have a valid channel
+		if (currentChannel) {
+			this.interVal = setInterval(() => {
+				this.syncData(currentChannel);
+			}, 60000);
+		}
 	}
 
 	componentWillUnmount() {
@@ -277,7 +285,9 @@ export class HeaderView extends Component {
 		const { currentChannel, getChangeChannel } = this.props;
 		const options = [];
 		let selectedValue = {};
-		if (nextProps.channels.length > 0) {
+		
+		// Add null check to prevent forEach error when channels is undefined
+		if (nextProps.channels && Array.isArray(nextProps.channels) && nextProps.channels.length > 0) {
 			nextProps.channels.forEach(element => {
 				options.push({
 					value: element.channel_genesis_hash,
@@ -520,13 +530,12 @@ export class HeaderView extends Component {
 
 		return (
 			<div>
-				{/* production */}
-				{/* development */}
-				<Websocket
+				{/* WebSocket disabled since backend platform is disabled */}
+				{/* <Websocket
 					url={webSocketUrl}
 					onMessage={this.handleData.bind(this)}
 					reconnect
-				/>
+				/> */}
 				<Router>
 					<div>
 						<Navbar className={classes.navbarHeader} expand="lg" fixed="top">
