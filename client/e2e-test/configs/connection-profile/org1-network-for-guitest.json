@@ -9,7 +9,7 @@
 			"password": "adminpw",
 			"affiliation": "org1.department1"
 		},
-		"enableAuthentication": true,
+		"enableAuthentication": false,
 		"organization": "org1",
 		"connection": {
 			"timeout": {
