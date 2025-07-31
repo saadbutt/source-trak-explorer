@@ -617,21 +617,6 @@ export class HeaderView extends Component {
 														<FontAwesome name="moon-o" className={classes.moonIcon} />
 													</div>
 												</DropdownItem>
-												<DropdownItem>
-													<div
-														className={classes.userIcon}
-														onClick={() => this.registerOpen()}
-													>
-														<FontAwesome name="user-plus" />
-														User management
-													</div>
-												</DropdownItem>
-												<DropdownItem divider />
-												<DropdownItem>
-													<div className={classes.logoutIcon} onClick={() => this.logout()}>
-														<FontAwesome name="sign-out" /> Sign out
-													</div>
-												</DropdownItem>
 											</DropdownMenu>
 										</Dropdown>
 									</Form>

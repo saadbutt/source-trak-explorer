@@ -209,6 +209,11 @@ export class Login extends Component {
 			authEnabled,
 			isLoading
 		} = this.state;
+
+		if (!authEnabled) {
+			return <div>Loading...</div>; // or redirect logic
+		}
+		
 		const { classes, error } = this.props;
 
 		return (
