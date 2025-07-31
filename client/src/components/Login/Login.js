@@ -93,13 +93,25 @@ export class Login extends Component {
 				value: '',
 				id: ''
 			},
-			autoLoginAttempted: false,
+			autoLoginAttempted: true,
 			error: '',
 			networks,
 			authEnabled: false,
 			isLoading: false
 		};
 	}
+
+	async componentDidMount() {
+		const { networks = [] } = this.state;
+		console.log("mount first", networks);
+		// If only one network and auth is disabled, skip login
+//		if (networks.length === 1 && !networks[0].authEnabled) {
+	//		this.performLogin({  network: networks[0].id });
+			await this.performLogin({user:"exploreradmin", password:"exploreradminpw", network: 'test-network' });
+
+//		}
+	}
+
 
 	componentWillReceiveProps(nextProps) {
 		const { networks = [] } = nextProps;
@@ -139,8 +151,8 @@ export class Login extends Component {
 
 		const info = await login(
 			{
-				user: authEnabled ? user : 'dummy-user',
-				password: authEnabled ? password : 'dummy-password'
+				user: 'exploreradmin',
+				password: 'exploreradminpw'
 			},
 			network
 		);
@@ -165,8 +177,11 @@ export class Login extends Component {
 		});
 	};
 
+
+
 	async componentDidUpdate() {
 		const { networks, autoLoginAttempted } = this.state;
+		console.log("networks, autoLoginAttempted",networks, autoLoginAttempted);
 
 		/*
 		 * If we have only one network and it doesn't have auth enabled, perform a login
@@ -184,7 +199,6 @@ export class Login extends Component {
 			await this.performLogin({ network: networks[0].id });
 		}
 	}
-
 	render() {
 		const {
 			info,

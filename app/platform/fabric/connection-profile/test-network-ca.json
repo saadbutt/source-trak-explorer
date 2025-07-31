@@ -13,7 +13,7 @@
 			"password": "exploreradminpw",
 			"affiliation": "org1.department1"
 		},
-		"enableAuthentication": true,
+		"enableAuthentication": false,
 		"organization": "Org1MSP",
 		"connection": {
 			"timeout": {
