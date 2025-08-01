@@ -26,8 +26,8 @@ const styles = theme => {
 	const dark = type === 'dark';
 	return {
 		app: {
-			backgroundColor: dark ? 'linear-gradient(135deg, #1a202c 0%, #2d3748 100%)' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-			background: dark ? 'linear-gradient(135deg, #1a202c 0%, #2d3748 100%)' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+			backgroundColor: dark ? 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f766e 100%)' : 'linear-gradient(135deg, #0ea5e9 0%, #0891b2 50%, #0d9488 100%)',
+			background: dark ? 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f766e 100%)' : 'linear-gradient(135deg, #0ea5e9 0%, #0891b2 50%, #0d9488 100%)',
 			position: 'absolute',
 			top: 0,
 			left: 0,

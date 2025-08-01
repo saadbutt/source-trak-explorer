@@ -51,18 +51,18 @@ const styles = theme => ({
 		boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
 		border: '1px solid rgba(0, 0, 0, 0.05)',
 		'& .dark-theme &': {
-			background: 'rgba(26, 32, 44, 0.95)',
-			border: '1px solid rgba(74, 85, 104, 0.3)',
+			background: 'rgba(15, 23, 42, 0.95)',
+			border: '1px solid rgba(71, 85, 105, 0.3)',
 			boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2)'
 		}
 	},
 	avatar: {
 		margin: theme.spacing.unit,
-		background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+		background: 'linear-gradient(135deg, #0891b2 0%, #0d9488 100%)',
 		width: '64px',
 		height: '64px',
 		'& .dark-theme &': {
-			background: 'linear-gradient(135deg, #4c51bf 0%, #667eea 100%)'
+			background: 'linear-gradient(135deg, #0ea5e9 0%, #0891b2 100%)'
 		}
 	},
 	form: {
@@ -71,7 +71,7 @@ const styles = theme => ({
 	},
 	submit: {
 		marginTop: theme.spacing.unit * 3,
-		background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+		background: 'linear-gradient(135deg, #0891b2 0%, #0d9488 100%)',
 		color: 'white',
 		padding: '12px 24px',
 		borderRadius: '8px',
@@ -79,26 +79,26 @@ const styles = theme => ({
 		textTransform: 'none',
 		fontSize: '1rem',
 		'&:hover': {
-			background: 'linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%)',
+			background: 'linear-gradient(135deg, #0e7490 0%, #0f766e 100%)',
 			transform: 'translateY(-1px)',
-			boxShadow: '0 4px 12px rgba(79, 70, 229, 0.4)'
+			boxShadow: '0 4px 12px rgba(14, 165, 233, 0.4)'
 		},
 		'& .dark-theme &': {
-			background: 'linear-gradient(135deg, #4c51bf 0%, #667eea 100%)',
+			background: 'linear-gradient(135deg, #0ea5e9 0%, #0891b2 100%)',
 			'&:hover': {
-				background: 'linear-gradient(135deg, #5a67d8 0%, #7c3aed 100%)'
+				background: 'linear-gradient(135deg, #0891b2 0%, #0d9488 100%)'
 			}
 		}
 	},
 	errortext: {
 		fontSize: 16,
 		fontWeight: 600,
-		color: '#e53e3e',
+		color: '#ef4444',
 		textAlign: 'center',
 		padding: '8px',
 		borderRadius: '6px',
-		background: 'rgba(229, 62, 62, 0.1)',
-		border: '1px solid rgba(229, 62, 62, 0.2)'
+		background: 'rgba(239, 68, 68, 0.1)',
+		border: '1px solid rgba(239, 68, 68, 0.2)'
 	}
 });
 

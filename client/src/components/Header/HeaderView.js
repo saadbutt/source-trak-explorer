@@ -90,9 +90,9 @@ const styles = theme => {
 	const { type } = theme.palette;
 	const dark = type === 'dark';
 	const darkNavbar = dark && {
-		background: 'rgba(26, 32, 44, 0.95)',
+		background: 'rgba(15, 23, 42, 0.95)',
 		backdropFilter: 'blur(10px)',
-		borderBottom: '1px solid rgba(74, 85, 104, 0.3)'
+		borderBottom: '1px solid rgba(71, 85, 105, 0.3)'
 	};
 	return {
 		logo: {
@@ -111,7 +111,7 @@ const styles = theme => {
 			...darkNavbar
 		},
 		tab: {
-			color: dark ? '#e2e8f0' : '#4a5568',
+			color: dark ? '#e2e8f0' : '#475569',
 			fontSize: '1rem',
 			fontWeight: 500,
 			height: 50,
@@ -120,8 +120,8 @@ const styles = theme => {
 			borderRadius: '8px',
 			transition: 'all 0.3s ease',
 			'&:hover': {
-				color: dark ? '#667eea' : '#4c51bf',
-				backgroundColor: dark ? 'rgba(79, 70, 229, 0.1)' : 'rgba(79, 70, 229, 0.1)',
+				color: dark ? '#0ea5e9' : '#0891b2',
+				backgroundColor: dark ? 'rgba(14, 165, 233, 0.1)' : 'rgba(14, 165, 233, 0.1)',
 				transform: 'translateY(-1px)'
 			},
 			'@media (max-width: 1415px) and (min-width: 990px)': {
@@ -131,13 +131,13 @@ const styles = theme => {
 		},
 		activeTab: {
 			color: '#ffffff',
-			backgroundColor: dark ? 'rgba(79, 70, 229, 0.2)' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-			background: dark ? 'rgba(79, 70, 229, 0.2)' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+			backgroundColor: dark ? 'rgba(14, 165, 233, 0.2)' : 'linear-gradient(135deg, #0891b2 0%, #0d9488 100%)',
+			background: dark ? 'rgba(14, 165, 233, 0.2)' : 'linear-gradient(135deg, #0891b2 0%, #0d9488 100%)',
 			height: 50,
 			margin: '0 0.5rem',
 			padding: '0.75rem 1.5rem',
 			borderRadius: '8px',
-			boxShadow: '0 2px 4px rgba(79, 70, 229, 0.2)',
+			boxShadow: '0 2px 4px rgba(14, 165, 233, 0.2)',
 			'&:hover': {
 				color: '#ffffff',
 				transform: 'translateY(-1px)'
@@ -155,13 +155,13 @@ const styles = theme => {
 			margin: '0 8px 8px 8px'
 		},
 		bell: {
-			color: dark ? '#a0aec0' : '#5f6164',
+			color: dark ? '#94a3b8' : '#5f6164',
 			fontSize: '18pt',
 			margin: '8px',
 			float: 'none',
 			transition: 'all 0.3s ease',
 			'&:hover': {
-				color: dark ? '#667eea' : '#4c51bf',
+				color: dark ? '#0ea5e9' : '#0891b2',
 				transform: 'scale(1.1)'
 			},
 			paddingLeft: '12px'
