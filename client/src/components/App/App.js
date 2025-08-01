@@ -16,7 +16,7 @@ import { chartSelectors } from '../../state/redux/charts';
 import { themeSelectors, themeActions } from '../../state/redux/theme';
 import { authSelectors } from '../../state/redux/auth';
 
-import Login from '../Login';
+// Removed Login import since we're bypassing authentication
 
 import Private from '../Route';
 
@@ -47,7 +47,7 @@ export class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			loading: true
+			loading: false // Set loading to false to skip the loading screen
 		};
 	}
 
@@ -65,6 +65,7 @@ export class App extends Component {
 	render() {
 		const { auth } = this.props;
 		const { loading } = this.state;
+		// Skip loading screen since authentication is bypassed
 		if (auth && loading) {
 			return <LandingPage updateLoadStatus={this.updateLoadStatus} />;
 		}
@@ -72,19 +73,14 @@ export class App extends Component {
 		const className = classnames(mode === 'dark' && 'dark-theme', classes.app);
 		return (
 			<div className={className}>
-				{auth && <Header refresh={this.refreshComponent} />}
+				<Header refresh={this.refreshComponent} />
 				{error && <ErrorMessage message={error} />}
 				<Router>
 					<Switch>
-						<Route
-							exact
-							path="/login"
-							render={routeprops => <Login {...routeprops} />}
-						/>
-						<Private path="/" render={routeprops => <Main {...routeprops} />} />
+						<Route path="/" render={routeprops => <Main {...routeprops} />} />
 					</Switch>
 				</Router>
-				{auth && <Footer />}
+				<Footer />
 			</div>
 		);
 	}

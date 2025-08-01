@@ -7,29 +7,18 @@
 
 import React from 'react';
 
-import { Route, Redirect } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 
 import { authSelectors } from '../../state/redux/auth';
 
 export function Private({ render, auth, ...rest }) {
-	const redirect = !auth;
+	// Always render the component without authentication checks
 	return (
 		<Route
 			{...rest}
-			render={props =>
-				!redirect ? (
-					render(props)
-				) : (
-					<Redirect
-						to={{
-							pathname: '/login',
-							state: { from: props.location }
-						}}
-					/>
-				)
-			}
+			render={props => render(props)}
 		/>
 	);
 }

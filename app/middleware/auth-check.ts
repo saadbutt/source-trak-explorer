@@ -7,29 +7,14 @@ import config from '../explorerconfig.json';
 
 /**
  *  The Auth Checker middleware function.
+ *  Modified to bypass authentication while maintaining API compatibility.
  */
 export const authCheckMiddleware = (req, res, next) => {
-	if (!req.headers.authorization) {
-		return res.status(401).end();
-	}
-
-	// Get the last part from a authorization header string like "bearer token-value"
-	const token = req.headers.authorization.split(' ')[1];
-
-	// Decode the token using a secret key-phrase
-	return jwt.verify(token, config.jwt.secret, (err, decoded) => {
-		// The 401 code is for unauthorized status
-		if (err) {
-			return res.status(401).end();
-		}
-
-		const requestUserId = decoded.user;
-
-		req.requestUserId = requestUserId;
-		req.network = decoded.network;
-
-		// TODO: check if a user exists, otherwise error
-
-		return next();
-	});
+	// Bypass authentication - always allow access
+	// Set default values to maintain API compatibility
+	req.requestUserId = 'anonymous';
+	req.network = 'default';
+	
+	// Continue to the next middleware/route handler
+	return next();
 };

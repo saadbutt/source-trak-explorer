@@ -131,9 +131,12 @@ export class Transactions extends Component {
 		// 	selection[element.blocknum] = false;
 		// });
 		const opts = [];
-		this.props.transactionByOrg.forEach(val => {
-			opts.push({ label: val.creator_msp_id, value: val.creator_msp_id });
-		});
+		// Add null check to prevent forEach error when transactionByOrg is undefined
+		if (this.props.transactionByOrg && Array.isArray(this.props.transactionByOrg)) {
+			this.props.transactionByOrg.forEach(val => {
+				opts.push({ label: val.creator_msp_id, value: val.creator_msp_id });
+			});
+		}
 		this.setState({ selection, options: opts, defaultQuery: true });
 		this.handleSearch();
 	}
