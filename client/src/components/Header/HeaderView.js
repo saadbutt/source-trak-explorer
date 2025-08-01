@@ -90,7 +90,9 @@ const styles = theme => {
 	const { type } = theme.palette;
 	const dark = type === 'dark';
 	const darkNavbar = dark && {
-		background: 'linear-gradient(to right, rgb(236, 233, 252), #4d4575)'
+		background: 'rgba(26, 32, 44, 0.95)',
+		backdropFilter: 'blur(10px)',
+		borderBottom: '1px solid rgba(74, 85, 104, 0.3)'
 	};
 	return {
 		logo: {
@@ -102,33 +104,46 @@ const styles = theme => {
 			}
 		},
 		navbarHeader: {
-			backgroundColor: '#e8e8e8',
+			backgroundColor: 'rgba(255, 255, 255, 0.95)',
+			backdropFilter: 'blur(10px)',
+			borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+			boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
 			...darkNavbar
 		},
 		tab: {
-			color: dark ? '#242036' : '#000000',
-			fontSize: '1.05rem',
-			fontWeight: 800,
+			color: dark ? '#e2e8f0' : '#4a5568',
+			fontSize: '1rem',
+			fontWeight: 500,
 			height: 50,
-			margin: 10,
+			margin: '0 0.5rem',
+			padding: '0.75rem 1.5rem',
+			borderRadius: '8px',
+			transition: 'all 0.3s ease',
 			'&:hover': {
-				color: dark ? '#242036' : '#000000'
+				color: dark ? '#667eea' : '#4c51bf',
+				backgroundColor: dark ? 'rgba(79, 70, 229, 0.1)' : 'rgba(79, 70, 229, 0.1)',
+				transform: 'translateY(-1px)'
 			},
 			'@media (max-width: 1415px) and (min-width: 990px)': {
-				fontSize: '0.85rem'
+				fontSize: '0.875rem',
+				padding: '0.5rem 1rem'
 			}
 		},
 		activeTab: {
 			color: '#ffffff',
-			backgroundColor: dark ? '#453e68' : '#58c5c2',
-			height: 60,
-			marginTop: 20,
-			padding: 10,
+			backgroundColor: dark ? 'rgba(79, 70, 229, 0.2)' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+			background: dark ? 'rgba(79, 70, 229, 0.2)' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+			height: 50,
+			margin: '0 0.5rem',
+			padding: '0.75rem 1.5rem',
+			borderRadius: '8px',
+			boxShadow: '0 2px 4px rgba(79, 70, 229, 0.2)',
 			'&:hover': {
-				color: '#ffffff'
+				color: '#ffffff',
+				transform: 'translateY(-1px)'
 			},
 			'@media (max-width: 1415px) and (min-width: 990px)': {
-				padding: '8%'
+				padding: '0.5rem 1rem'
 			}
 		},
 		adminButton: {
@@ -136,26 +151,18 @@ const styles = theme => {
 			marginTop: 0
 		},
 		themeSwitch: {
-			// height: 50,
-			// lineHeight: '50px',
 			textAlign: 'center',
 			margin: '0 8px 8px 8px'
-			// width: 100,
-			// paddingTop: 0,
-			// '@media (max-width: 1415px) and (min-width: 990px)': {
-			// 	display: 'flex'
-			// },
-			// '@media (max-width: 990px)': {
-			// 	marginLeft: 0
-			// }
 		},
 		bell: {
-			color: dark ? 'rgb(139, 143, 148)' : '#5f6164',
+			color: dark ? '#a0aec0' : '#5f6164',
 			fontSize: '18pt',
 			margin: '8px',
 			float: 'none',
+			transition: 'all 0.3s ease',
 			'&:hover': {
-				color: dark ? '#c1d7f0' : '#24272a'
+				color: dark ? '#667eea' : '#4c51bf',
+				transform: 'scale(1.1)'
 			},
 			paddingLeft: '12px'
 		},

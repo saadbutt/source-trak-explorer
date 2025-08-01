@@ -26,13 +26,16 @@ const styles = theme => {
 	const dark = type === 'dark';
 	return {
 		app: {
-			backgroundColor: dark ? 'rgb(36, 32, 54)' : 'rgb(240, 245, 249)',
+			backgroundColor: dark ? 'linear-gradient(135deg, #1a202c 0%, #2d3748 100%)' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+			background: dark ? 'linear-gradient(135deg, #1a202c 0%, #2d3748 100%)' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
 			position: 'absolute',
 			top: 0,
 			left: 0,
 			bottom: 0,
 			right: 0,
 			overflow: 'auto',
+			minHeight: '100vh',
+			fontFamily: '"Inter", "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif',
 			'& ol, & ul': {
 				listStyle: 'none'
 			}
@@ -100,8 +103,11 @@ const mapStateToProps = state => {
 	};
 };
 
-const mapDispatchToProps = { changeTheme };
+const mapDispatchToProps = {
+	changeTheme
+};
 
-const connectedComponent = connect(mapStateToProps, mapDispatchToProps)(App);
-/* istanbul ignore next */
-export default withStyles(styles)(connectedComponent);
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(withStyles(styles)(App));

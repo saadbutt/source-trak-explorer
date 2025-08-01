@@ -43,24 +43,62 @@ const styles = theme => ({
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
-		padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme
-			.spacing.unit * 3}px`
+		padding: `${theme.spacing.unit * 3}px ${theme.spacing.unit * 4}px ${theme
+			.spacing.unit * 4}px`,
+		background: 'rgba(255, 255, 255, 0.95)',
+		backdropFilter: 'blur(10px)',
+		borderRadius: '16px',
+		boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+		border: '1px solid rgba(0, 0, 0, 0.05)',
+		'& .dark-theme &': {
+			background: 'rgba(26, 32, 44, 0.95)',
+			border: '1px solid rgba(74, 85, 104, 0.3)',
+			boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2)'
+		}
 	},
 	avatar: {
 		margin: theme.spacing.unit,
-		backgroundColor: theme.palette.secondary.main
+		background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+		width: '64px',
+		height: '64px',
+		'& .dark-theme &': {
+			background: 'linear-gradient(135deg, #4c51bf 0%, #667eea 100%)'
+		}
 	},
 	form: {
 		width: '100%', // Fix IE 11 issue.
-		marginTop: theme.spacing.unit
+		marginTop: theme.spacing.unit * 2
 	},
 	submit: {
-		marginTop: theme.spacing.unit * 3
+		marginTop: theme.spacing.unit * 3,
+		background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+		color: 'white',
+		padding: '12px 24px',
+		borderRadius: '8px',
+		fontWeight: 600,
+		textTransform: 'none',
+		fontSize: '1rem',
+		'&:hover': {
+			background: 'linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%)',
+			transform: 'translateY(-1px)',
+			boxShadow: '0 4px 12px rgba(79, 70, 229, 0.4)'
+		},
+		'& .dark-theme &': {
+			background: 'linear-gradient(135deg, #4c51bf 0%, #667eea 100%)',
+			'&:hover': {
+				background: 'linear-gradient(135deg, #5a67d8 0%, #7c3aed 100%)'
+			}
+		}
 	},
 	errortext: {
 		fontSize: 16,
-		font: 'bold',
-		color: 'red'
+		fontWeight: 600,
+		color: '#e53e3e',
+		textAlign: 'center',
+		padding: '8px',
+		borderRadius: '6px',
+		background: 'rgba(229, 62, 62, 0.1)',
+		border: '1px solid rgba(229, 62, 62, 0.2)'
 	}
 });
 

@@ -1,53 +1,190 @@
 /**
  *    SPDX-License-Identifier: Apache-2.0
+ *    Modernized Dark Theme
  */
 /* Dark-Theme is switched by the class name */
 
+.dark-theme {
+	background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+	color: #e2e8f0;
+}
+
 .dark-theme svg.custom .node circle {
-	fill: #f3f3ff;
-	stroke: #2593b8;
+	fill: #2d3748;
+	stroke: #4c51bf;
+	stroke-width: 2px;
 }
 
 .dark-theme svg.custom .node text {
-	background-color: #444;
-	fill: #000000;
+	background-color: rgba(26, 32, 44, 0.9);
+	fill: #e2e8f0;
+	font-weight: 500;
+}
+
+.dark-theme svg.custom .node:hover circle {
+	fill: #4a5568;
+	stroke: #667eea;
+	stroke-width: 3px;
+}
+
+.dark-theme svg.custom path.link {
+	stroke: #4a5568;
+}
+
+.dark-theme svg.custom path.link:hover {
+	stroke: #667eea;
+	stroke-width: 3px;
 }
 
 /*Tables Styling*/
 .dark-theme .table-hover tbody tr:hover td,
 .dark-theme .table-hover tbody tr:hover th {
-	transition: background-color 1s ease;
-	background-color: #5e558e !important;
-	opacity: 0.8;
+	transition: background-color 0.2s ease;
+	background-color: rgba(79, 70, 229, 0.1) !important;
 }
 
 .dark-theme .-pageJump input {
-	background: #7165ad !important;
-	color: #ffffff !important;
+	background: #2d3748 !important;
+	color: #e2e8f0 !important;
+	border: 1px solid #4a5568;
+	border-radius: 8px;
 }
+
 .dark-theme .select-wrap select {
-	background: #7165ad !important;
-	color: #ffffff !important;
+	background: #2d3748 !important;
+	color: #e2e8f0 !important;
+	border: 1px solid #4a5568;
+	border-radius: 8px;
 }
 
 .dark-theme li .active {
-	color: #ffffff !important;
-	background-color: #5e558e !important;
+	color: #e2e8f0 !important;
+	background-color: rgba(79, 70, 229, 0.2) !important;
+	border-radius: 8px;
 }
+
 .dark-theme li .active:hover {
-	color: #ffffff !important;
+	color: #e2e8f0 !important;
+	background-color: rgba(79, 70, 229, 0.3) !important;
 }
 
 .dark-theme .active .nav-link {
-	color: #ffffff;
-	fill: #ffffff;
+	color: #e2e8f0;
+	fill: #e2e8f0;
 }
 
 /*Time Chart and Chart stats */
 .dark-theme .nav-link:hover {
-	color: #007bff !important;
+	color: #667eea !important;
 }
+
 .dark-theme .rt-noData {
-	color: #ffffff !important;
+	color: #e2e8f0 !important;
 	background: transparent !important;
+}
+
+/* Dark theme card styles */
+.dark-theme .card {
+	background: #2d3748;
+	border: 1px solid #4a5568;
+	color: #e2e8f0;
+}
+
+.dark-theme .card:hover {
+	background: #4a5568;
+	border-color: #667eea;
+}
+
+/* Dark theme table styles */
+.dark-theme .table {
+	background: #2d3748;
+	color: #e2e8f0;
+}
+
+.dark-theme .table thead th {
+	background: #1a202c;
+	color: #e2e8f0;
+	border-bottom-color: #4a5568 !important;
+}
+
+.dark-theme .table tbody td {
+	border-color: #4a5568 !important;
+	color: #e2e8f0;
+}
+
+.dark-theme .table-hover tbody tr:hover td {
+	background-color: rgba(79, 70, 229, 0.1) !important;
+}
+
+/* Dark theme form styles */
+.dark-theme .form-control {
+	background: #2d3748;
+	border-color: #4a5568;
+	color: #e2e8f0;
+}
+
+.dark-theme .form-control:focus {
+	border-color: #667eea;
+	background: #4a5568;
+	color: #e2e8f0;
+}
+
+/* Dark theme button styles */
+.dark-theme .btn-primary {
+	background: linear-gradient(135deg, #4c51bf 0%, #667eea 100%);
+	color: #e2e8f0;
+}
+
+.dark-theme .btn-primary:hover {
+	background: linear-gradient(135deg, #5a67d8 0%, #7c3aed 100%);
+}
+
+/* Dark theme navbar */
+.dark-theme #root > div > div:nth-child(1) > nav {
+	background: rgba(26, 32, 44, 0.95);
+	border-bottom: 1px solid #4a5568;
+}
+
+.dark-theme div.menuItems > nav {
+	background: rgba(26, 32, 44, 0.95);
+	border: 1px solid #4a5568;
+}
+
+.dark-theme div.menuItems > nav > ul > li {
+	color: #a0aec0;
+}
+
+.dark-theme div.menuItems > nav > ul > li:hover {
+	color: #667eea;
+	background: rgba(79, 70, 229, 0.1);
+}
+
+.dark-theme .menuItems > nav > ul > li.active {
+	color: #667eea;
+	background: rgba(79, 70, 229, 0.2);
+}
+
+/* Dark theme alert styles */
+.dark-theme .alert-success {
+	background: rgba(72, 187, 120, 0.1);
+	color: #9ae6b4;
+	border-left: 4px solid #48bb78;
+}
+
+.dark-theme .alert-info {
+	background: rgba(66, 153, 225, 0.1);
+	color: #90cdf4;
+	border-left: 4px solid #4299e1;
+}
+
+.dark-theme .alert-warning {
+	background: rgba(237, 137, 54, 0.1);
+	color: #fbd38d;
+	border-left: 4px solid #ed8936;
+}
+
+.dark-theme .alert-danger {
+	background: rgba(245, 101, 101, 0.1);
+	color: #feb2b2;
+	border-left: 4px solid #f56565;
 }

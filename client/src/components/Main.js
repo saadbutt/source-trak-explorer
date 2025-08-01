@@ -77,7 +77,16 @@ const styles = theme => {
 	const dark = type === 'dark';
 	return {
 		main: {
-			color: dark ? '#ffffff' : undefined
+			color: dark ? '#e2e8f0' : '#1a202c',
+			fontFamily: '"Inter", "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif',
+			padding: '2rem',
+			minHeight: 'calc(100vh - 160px)',
+			background: dark ? 'rgba(26, 32, 44, 0.5)' : 'rgba(255, 255, 255, 0.1)',
+			backdropFilter: 'blur(10px)',
+			borderRadius: '12px',
+			margin: '1rem',
+			boxShadow: dark ? '0 4px 6px -1px rgba(0, 0, 0, 0.3)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+			border: dark ? '1px solid rgba(74, 85, 104, 0.3)' : '1px solid rgba(0, 0, 0, 0.05)'
 		}
 	};
 };
