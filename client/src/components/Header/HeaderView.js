@@ -29,7 +29,7 @@ import Dialog from '@material-ui/core/Dialog';
 import Loader from 'react-loader-spinner';
 import Select from '../Styled/Select';
 import NotificationsPanel from '../Panels/NotificationsPanel';
-import Logo from '../../static/images/Explorer_Logo.svg';
+import Logo from '../../static/images/SourceTrak_Logo1.svg';
 import AdminPanel from '../Panels/AdminPanel';
 import { chartOperations, chartSelectors } from '../../state/redux/charts';
 import { tableOperations, tableSelectors } from '../../state/redux/tables';
@@ -90,7 +90,9 @@ const styles = theme => {
 	const { type } = theme.palette;
 	const dark = type === 'dark';
 	const darkNavbar = dark && {
-		background: 'linear-gradient(to right, rgb(236, 233, 252), #4d4575)'
+		background: 'rgba(15, 23, 42, 0.95)',
+		backdropFilter: 'blur(10px)',
+		borderBottom: '1px solid rgba(71, 85, 105, 0.3)'
 	};
 	return {
 		logo: {
@@ -102,33 +104,46 @@ const styles = theme => {
 			}
 		},
 		navbarHeader: {
-			backgroundColor: '#e8e8e8',
+			backgroundColor: 'rgba(255, 255, 255, 0.95)',
+			backdropFilter: 'blur(10px)',
+			borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
+			boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
 			...darkNavbar
 		},
 		tab: {
-			color: dark ? '#242036' : '#000000',
-			fontSize: '1.05rem',
-			fontWeight: 800,
+			color: dark ? '#e2e8f0' : '#475569',
+			fontSize: '1rem',
+			fontWeight: 500,
 			height: 50,
-			margin: 10,
+			margin: '0 0.5rem',
+			padding: '0.75rem 1.5rem',
+			borderRadius: '8px',
+			transition: 'all 0.3s ease',
 			'&:hover': {
-				color: dark ? '#242036' : '#000000'
+				color: dark ? '#0ea5e9' : '#0891b2',
+				backgroundColor: dark ? 'rgba(14, 165, 233, 0.1)' : 'rgba(14, 165, 233, 0.1)',
+				transform: 'translateY(-1px)'
 			},
 			'@media (max-width: 1415px) and (min-width: 990px)': {
-				fontSize: '0.85rem'
+				fontSize: '0.875rem',
+				padding: '0.5rem 1rem'
 			}
 		},
 		activeTab: {
 			color: '#ffffff',
-			backgroundColor: dark ? '#453e68' : '#58c5c2',
-			height: 60,
-			marginTop: 20,
-			padding: 10,
+			backgroundColor: dark ? 'rgba(14, 165, 233, 0.2)' : 'linear-gradient(135deg, #0891b2 0%, #0d9488 100%)',
+			background: dark ? 'rgba(14, 165, 233, 0.2)' : 'linear-gradient(135deg, #0891b2 0%, #0d9488 100%)',
+			height: 50,
+			margin: '0 0.5rem',
+			padding: '0.75rem 1.5rem',
+			borderRadius: '8px',
+			boxShadow: '0 2px 4px rgba(14, 165, 233, 0.2)',
 			'&:hover': {
-				color: '#ffffff'
+				color: '#ffffff',
+				transform: 'translateY(-1px)'
 			},
 			'@media (max-width: 1415px) and (min-width: 990px)': {
-				padding: '8%'
+				padding: '0.5rem 1rem'
 			}
 		},
 		adminButton: {
@@ -136,26 +151,18 @@ const styles = theme => {
 			marginTop: 0
 		},
 		themeSwitch: {
-			// height: 50,
-			// lineHeight: '50px',
 			textAlign: 'center',
 			margin: '0 8px 8px 8px'
-			// width: 100,
-			// paddingTop: 0,
-			// '@media (max-width: 1415px) and (min-width: 990px)': {
-			// 	display: 'flex'
-			// },
-			// '@media (max-width: 990px)': {
-			// 	marginLeft: 0
-			// }
 		},
 		bell: {
-			color: dark ? 'rgb(139, 143, 148)' : '#5f6164',
+			color: dark ? '#94a3b8' : '#5f6164',
 			fontSize: '18pt',
 			margin: '8px',
 			float: 'none',
+			transition: 'all 0.3s ease',
 			'&:hover': {
-				color: dark ? '#c1d7f0' : '#24272a'
+				color: dark ? '#0ea5e9' : '#0891b2',
+				transform: 'scale(1.1)'
 			},
 			paddingLeft: '12px'
 		},
@@ -608,17 +615,7 @@ export class HeaderView extends Component {
 														<FontAwesome name="moon-o" className={classes.moonIcon} />
 													</div>
 												</DropdownItem>
-												<DropdownItem>
-													<div
-														className={classes.userIcon}
-														onClick={() => this.registerOpen()}
-													>
-														<FontAwesome name="user-plus" />
-														User management
-													</div>
-												</DropdownItem>
-												<DropdownItem divider />
-												{/* Removed logout dropdown item since authentication is bypassed */}
+
 											</DropdownMenu>
 										</Dropdown>
 									</Form>
