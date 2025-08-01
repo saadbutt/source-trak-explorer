@@ -35,7 +35,7 @@ const styles = theme => {
 	const dark = type === 'dark';
 	return {
 		background: {
-			backgroundColor: dark ? 'rgb(36, 32, 54)' : '#f0f5f9'
+			backgroundColor: dark ? 'rgb(36, 32, 54)' : '#0000'
 		},
 		view: {
 			paddingTop: 85,

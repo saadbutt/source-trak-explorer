@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 import Slider from 'react-slick';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
-import Logo from '../../static/images/SourceTrak_Logo.svg';
+import Logo from '../../static/images/SourceTrak_Logo1.svg';
 import { chartOperations, chartSelectors } from '../../state/redux/charts';
 import { tableOperations, tableSelectors } from '../../state/redux/tables';
 import { authOperations } from '../../state/redux/auth';
@@ -66,7 +66,7 @@ const styles = theme => {
 	/* eslint-disable */
 	dark
 		? (document.body.style.backgroundColor = '#4d4575')
-		: (document.body.style.backgroundColor = '#f0f5f9');
+		: (document.body.style.backgroundColor = '#0000');
 	return {
 		background: {
 			backgroundColor: 'transparent'
