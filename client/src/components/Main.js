@@ -13,6 +13,7 @@ import TransactionsView from './View/TransactionsView';
 import ChannelView from './View/ChannelView';
 import ChaincodeView from './View/ChaincodeView';
 import DashboardView from './View/DashboardView';
+import ModernDashboard from './Dashboard/ModernDashboard';
 import ChannelsView from './View/ChannelsView';
 import { chartSelectors } from '../state/redux/charts';
 import { tableOperations, tableSelectors } from '../state/redux/tables';
@@ -231,7 +232,14 @@ export const Main = props => {
 						exact
 						path="/"
 						render={routeprops => (
-							<DashboardView {...{ ...dashboardViewProps, ...routeprops }} />
+                            <ModernDashboard 
+								{...dashboardViewProps} 
+								{...routeprops}
+								onSearch={(query) => {
+									// Handle search functionality
+									console.log('Search query:', query);
+								}}
+							/>
 						)}
 					/>
 					<Private
