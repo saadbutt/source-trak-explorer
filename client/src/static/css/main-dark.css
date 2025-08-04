@@ -1,190 +1,53 @@
 /**
  *    SPDX-License-Identifier: Apache-2.0
- *    Modernized Dark Theme - New Color Scheme
  */
 /* Dark-Theme is switched by the class name */
 
-.dark-theme {
-	background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f766e 100%);
-	color: #e2e8f0;
-}
-
 .dark-theme svg.custom .node circle {
-	fill: #0f172a;
-	stroke: #0891b2;
-	stroke-width: 2px;
+	fill: #f3f3ff;
+	stroke: #2593b8;
 }
 
 .dark-theme svg.custom .node text {
-	background-color: rgba(15, 23, 42, 0.9);
-	fill: #e2e8f0;
-	font-weight: 500;
-}
-
-.dark-theme svg.custom .node:hover circle {
-	fill: #1e293b;
-	stroke: #0ea5e9;
-	stroke-width: 3px;
-}
-
-.dark-theme svg.custom path.link {
-	stroke: #334155;
-}
-
-.dark-theme svg.custom path.link:hover {
-	stroke: #0ea5e9;
-	stroke-width: 3px;
+	background-color: #444;
+	fill: #000000;
 }
 
 /*Tables Styling*/
 .dark-theme .table-hover tbody tr:hover td,
 .dark-theme .table-hover tbody tr:hover th {
-	transition: background-color 0.2s ease;
-	background-color: rgba(14, 165, 233, 0.1) !important;
+	transition: background-color 1s ease;
+	background-color: #5e558e !important;
+	opacity: 0.8;
 }
 
 .dark-theme .-pageJump input {
-	background: #1e293b !important;
-	color: #e2e8f0 !important;
-	border: 1px solid #475569;
-	border-radius: 8px;
+	background: #7165ad !important;
+	color: #ffffff !important;
 }
-
 .dark-theme .select-wrap select {
-	background: #1e293b !important;
-	color: #e2e8f0 !important;
-	border: 1px solid #475569;
-	border-radius: 8px;
+	background: #7165ad !important;
+	color: #ffffff !important;
 }
 
 .dark-theme li .active {
-	color: #e2e8f0 !important;
-	background-color: rgba(14, 165, 233, 0.2) !important;
-	border-radius: 8px;
+	color: #ffffff !important;
+	background-color: #5e558e !important;
 }
-
 .dark-theme li .active:hover {
-	color: #e2e8f0 !important;
-	background-color: rgba(14, 165, 233, 0.3) !important;
+	color: #ffffff !important;
 }
 
 .dark-theme .active .nav-link {
-	color: #e2e8f0;
-	fill: #e2e8f0;
+	color: #ffffff;
+	fill: #ffffff;
 }
 
 /*Time Chart and Chart stats */
 .dark-theme .nav-link:hover {
-	color: #0ea5e9 !important;
+	color: #007bff !important;
 }
-
 .dark-theme .rt-noData {
-	color: #e2e8f0 !important;
+	color: #ffffff !important;
 	background: transparent !important;
-}
-
-/* Dark theme card styles */
-.dark-theme .card {
-	background: #1e293b;
-	border: 1px solid #475569;
-	color: #e2e8f0;
-}
-
-.dark-theme .card:hover {
-	background: #334155;
-	border-color: #0ea5e9;
-}
-
-/* Dark theme table styles */
-.dark-theme .table {
-	background: #1e293b;
-	color: #e2e8f0;
-}
-
-.dark-theme .table thead th {
-	background: #0f172a;
-	color: #e2e8f0;
-	border-bottom-color: #475569 !important;
-}
-
-.dark-theme .table tbody td {
-	border-color: #475569 !important;
-	color: #e2e8f0;
-}
-
-.dark-theme .table-hover tbody tr:hover td {
-	background-color: rgba(14, 165, 233, 0.1) !important;
-}
-
-/* Dark theme form styles */
-.dark-theme .form-control {
-	background: #1e293b;
-	border-color: #475569;
-	color: #e2e8f0;
-}
-
-.dark-theme .form-control:focus {
-	border-color: #0ea5e9;
-	background: #334155;
-	color: #e2e8f0;
-}
-
-/* Dark theme button styles */
-.dark-theme .btn-primary {
-	background: linear-gradient(135deg, #0891b2 0%, #0d9488 100%);
-	color: #e2e8f0;
-}
-
-.dark-theme .btn-primary:hover {
-	background: linear-gradient(135deg, #0ea5e9 0%, #0f766e 100%);
-}
-
-/* Dark theme navbar */
-.dark-theme #root > div > div:nth-child(1) > nav {
-	background: rgba(15, 23, 42, 0.95);
-	border-bottom: 1px solid #475569;
-}
-
-.dark-theme div.menuItems > nav {
-	background: rgba(15, 23, 42, 0.95);
-	border: 1px solid #475569;
-}
-
-.dark-theme div.menuItems > nav > ul > li {
-	color: #94a3b8;
-}
-
-.dark-theme div.menuItems > nav > ul > li:hover {
-	color: #0ea5e9;
-	background: rgba(14, 165, 233, 0.1);
-}
-
-.dark-theme .menuItems > nav > ul > li.active {
-	color: #ffffff;
-	background: linear-gradient(135deg, #0891b2 0%, #0d9488 100%);
-}
-
-/* Dark theme alert styles */
-.dark-theme .alert-success {
-	background: rgba(34, 197, 94, 0.1);
-	color: #86efac;
-	border-left: 4px solid #22c55e;
-}
-
-.dark-theme .alert-info {
-	background: rgba(14, 165, 233, 0.1);
-	color: #7dd3fc;
-	border-left: 4px solid #0ea5e9;
-}
-
-.dark-theme .alert-warning {
-	background: rgba(245, 158, 11, 0.1);
-	color: #fcd34d;
-	border-left: 4px solid #f59e0b;
-}
-
-.dark-theme .alert-danger {
-	background: rgba(239, 68, 68, 0.1);
-	color: #fca5a5;
-	border-left: 4px solid #ef4444;
 }

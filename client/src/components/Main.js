@@ -13,7 +13,6 @@ import TransactionsView from './View/TransactionsView';
 import ChannelView from './View/ChannelView';
 import ChaincodeView from './View/ChaincodeView';
 import DashboardView from './View/DashboardView';
-import ModernDashboard from './Dashboard/ModernDashboard';
 import ChannelsView from './View/ChannelsView';
 import { chartSelectors } from '../state/redux/charts';
 import { tableOperations, tableSelectors } from '../state/redux/tables';
@@ -78,16 +77,7 @@ const styles = theme => {
 	const dark = type === 'dark';
 	return {
 		main: {
-			color: dark ? '#e2e8f0' : '#0f172a',
-			fontFamily: '"Inter", "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif',
-			padding: '2rem',
-			minHeight: 'calc(100vh - 160px)',
-			background: dark ? 'rgba(15, 23, 42, 0.5)' : 'rgba(255, 255, 255, 0.1)',
-			backdropFilter: 'blur(10px)',
-			borderRadius: '12px',
-			margin: '1rem',
-			boxShadow: dark ? '0 4px 6px -1px rgba(0, 0, 0, 0.3)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-			border: dark ? '1px solid rgba(71, 85, 105, 0.3)' : '1px solid rgba(0, 0, 0, 0.05)'
+			color: dark ? '#ffffff' : undefined
 		}
 	};
 };
@@ -232,14 +222,7 @@ export const Main = props => {
 						exact
 						path="/"
 						render={routeprops => (
-                            <ModernDashboard 
-								{...dashboardViewProps} 
-								{...routeprops}
-								onSearch={(query) => {
-									// Handle search functionality
-									console.log('Search query:', query);
-								}}
-							/>
+							<DashboardView {...{ ...dashboardViewProps, ...routeprops }} />
 						)}
 					/>
 					<Private

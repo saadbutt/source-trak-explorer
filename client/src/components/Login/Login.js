@@ -43,62 +43,24 @@ const styles = theme => ({
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
-		padding: `${theme.spacing.unit * 3}px ${theme.spacing.unit * 4}px ${theme
-			.spacing.unit * 4}px`,
-		background: 'rgba(255, 255, 255, 0.95)',
-		backdropFilter: 'blur(10px)',
-		borderRadius: '16px',
-		boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-		border: '1px solid rgba(0, 0, 0, 0.05)',
-		'& .dark-theme &': {
-			background: 'rgba(15, 23, 42, 0.95)',
-			border: '1px solid rgba(71, 85, 105, 0.3)',
-			boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2)'
-		}
+		padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme
+			.spacing.unit * 3}px`
 	},
 	avatar: {
 		margin: theme.spacing.unit,
-		background: 'linear-gradient(135deg, #0891b2 0%, #0d9488 100%)',
-		width: '64px',
-		height: '64px',
-		'& .dark-theme &': {
-			background: 'linear-gradient(135deg, #0ea5e9 0%, #0891b2 100%)'
-		}
+		backgroundColor: theme.palette.secondary.main
 	},
 	form: {
 		width: '100%', // Fix IE 11 issue.
-		marginTop: theme.spacing.unit * 2
+		marginTop: theme.spacing.unit
 	},
 	submit: {
-		marginTop: theme.spacing.unit * 3,
-		background: 'linear-gradient(135deg, #0891b2 0%, #0d9488 100%)',
-		color: 'white',
-		padding: '12px 24px',
-		borderRadius: '8px',
-		fontWeight: 600,
-		textTransform: 'none',
-		fontSize: '1rem',
-		'&:hover': {
-			background: 'linear-gradient(135deg, #0e7490 0%, #0f766e 100%)',
-			transform: 'translateY(-1px)',
-			boxShadow: '0 4px 12px rgba(14, 165, 233, 0.4)'
-		},
-		'& .dark-theme &': {
-			background: 'linear-gradient(135deg, #0ea5e9 0%, #0891b2 100%)',
-			'&:hover': {
-				background: 'linear-gradient(135deg, #0891b2 0%, #0d9488 100%)'
-			}
-		}
+		marginTop: theme.spacing.unit * 3
 	},
 	errortext: {
 		fontSize: 16,
-		fontWeight: 600,
-		color: '#ef4444',
-		textAlign: 'center',
-		padding: '8px',
-		borderRadius: '6px',
-		background: 'rgba(239, 68, 68, 0.1)',
-		border: '1px solid rgba(239, 68, 68, 0.2)'
+		font: 'bold',
+		color: 'red'
 	}
 });
 
@@ -131,25 +93,13 @@ export class Login extends Component {
 				value: '',
 				id: ''
 			},
-			autoLoginAttempted: true,
+			autoLoginAttempted: false,
 			error: '',
 			networks,
 			authEnabled: false,
 			isLoading: false
 		};
 	}
-
-	async componentDidMount() {
-		const { networks = [] } = this.state;
-		console.log("mount first", networks);
-		// If only one network and auth is disabled, skip login
-//		if (networks.length === 1 && !networks[0].authEnabled) {
-	//		this.performLogin({  network: networks[0].id });
-			await this.performLogin({user:"exploreradmin", password:"exploreradminpw", network: 'test-network' });
-
-//		}
-	}
-
 
 	componentWillReceiveProps(nextProps) {
 		const { networks = [] } = nextProps;
@@ -215,11 +165,8 @@ export class Login extends Component {
 		});
 	};
 
-
-
 	async componentDidUpdate() {
 		const { networks, autoLoginAttempted } = this.state;
-		console.log("networks, autoLoginAttempted",networks, autoLoginAttempted);
 
 		/*
 		 * If we have only one network and it doesn't have auth enabled, perform a login
@@ -237,6 +184,7 @@ export class Login extends Component {
 			await this.performLogin({ network: networks[0].id });
 		}
 	}
+
 	render() {
 		const {
 			info,
@@ -247,11 +195,6 @@ export class Login extends Component {
 			authEnabled,
 			isLoading
 		} = this.state;
-
-		if (!authEnabled) {
-			return <div>Loading...</div>; // or redirect logic
-		}
-		
 		const { classes, error } = this.props;
 
 		return (
@@ -261,7 +204,7 @@ export class Login extends Component {
 						<LockOutlinedIcon />
 					</Avatar>
 					<Typography component="h5" variant="headline">
-						LOG in
+						Sign in
 					</Typography>
 					<form className={classes.form} onSubmit={this.submitForm}>
 						<FormControl margin="normal" required fullWidth>

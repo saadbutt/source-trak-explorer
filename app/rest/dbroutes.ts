@@ -6,6 +6,8 @@ import { Platform } from '../platform/fabric/Platform';
  */
 
 import * as requtil from './requestutils';
+import { channelResolver } from '../middleware/channel-resolver';
+import { testRoutes } from './test-routes';
 
 interface ExtRequest extends Request {
 	network: string;
@@ -21,20 +23,84 @@ export function dbroutes(router: Router, platform: Platform) {
 	const dbStatusMetrics = platform.getPersistence().getMetricService();
 	const dbCrudService = platform.getPersistence().getCrudService();
 
-	router.get('/status/:channel_genesis_hash', (req, res) => {
-		const channel_genesis_hash = req.params.channel_genesis_hash;
-		if (channel_genesis_hash) {
+	// Apply channel resolver middleware to all routes that use channel_genesis_hash
+	const channelResolverMiddleware = channelResolver(platform);
+
+	// Add global debugging middleware
+	router.use((req, res, next) => {
+		console.log(`[Global Debug] ${req.method} ${req.url}`);
+		next();
+	});
+
+	// Add a simple test route
+	router.get('/test', (req, res) => {
+		console.log(`[Test Route] Called`);
+		res.json({ status: 200, message: 'Test route working' });
+	});
+
+	// Add a database test route
+	router.get('/test-db', async (req, res) => {
+		console.log(`[Test DB Route] Called`);
+		try {
 			const extReq = (req as unknown) as ExtRequest;
-			dbStatusMetrics.getStatus(extReq.network, channel_genesis_hash, data => {
-				if (data && data.chaincodeCount && data.txCount && data.peerCount) {
-					return res.send(data);
-				}
-				return requtil.notFound(req, res);
-			});
-		} else {
-			return requtil.invalidRequest(req, res);
+			const channelGenesisHash =
+				'c8b8fd3ed6e387b5600596a5e2c2c1a6243fea2db161627b3a57d3ca729155ac';
+			const networkName = 'test-network';
+
+			console.log(`[Test DB Route] About to call getBlockAndTxList`);
+			const data = await dbCrudService.getBlockAndTxList(
+				networkName,
+				channelGenesisHash,
+				0,
+				'1970-01-01',
+				'2030-12-31',
+				[],
+				1,
+				10
+			);
+			console.log(`[Test DB Route] Data returned:`, data);
+			res.json({ status: 200, data: data });
+		} catch (error) {
+			console.error(`[Test DB Route] Error:`, error);
+			res.status(500).json({ status: 500, error: String(error) });
 		}
 	});
+
+	// Add a simple blocks route
+	router.get(
+		'/simple-blocks/:channel_genesis_hash/:blocknum',
+		async (req, res) => {
+			console.log(`[Simple Blocks Route] Called`);
+			console.log(`[Simple Blocks Route] Params:`, req.params);
+			res.json({
+				status: 200,
+				message: 'Simple blocks route working',
+				params: req.params
+			});
+		}
+	);
+
+	// Add test routes
+	testRoutes(router, platform);
+
+	router.get(
+		'/status/:channel_genesis_hash',
+		channelResolverMiddleware,
+		(req, res) => {
+			const channel_genesis_hash = req.params.channel_genesis_hash;
+			if (channel_genesis_hash) {
+				const extReq = (req as unknown) as ExtRequest;
+				dbStatusMetrics.getStatus(extReq.network, channel_genesis_hash, data => {
+					if (data && data.chaincodeCount && data.txCount && data.peerCount) {
+						return res.send(data);
+					}
+					return requtil.notFound(req, res);
+				});
+			} else {
+				return requtil.invalidRequest(req, res);
+			}
+		}
+	);
 
 	/**
 	 * Transaction count
@@ -48,6 +114,7 @@ export function dbroutes(router: Router, platform: Platform) {
 	 */
 	router.get(
 		'/block/transactions/:channel_genesis_hash/:number',
+		channelResolverMiddleware,
 		async (req, res) => {
 			const number = parseInt(req.params.number);
 			const channel_genesis_hash = req.params.channel_genesis_hash;
@@ -84,39 +151,47 @@ export function dbroutes(router: Router, platform: Platform) {
 	 * 'type': 'header.channel_header.type'
 	 * }
 	 */
-	router.get('/transaction/:channel_genesis_hash/:txid', (req, res) => {
-		const txid = req.params.txid;
-		const channel_genesis_hash = req.params.channel_genesis_hash;
-		if (txid && txid !== '0' && channel_genesis_hash) {
-			const extReq = (req as unknown) as ExtRequest;
-			dbCrudService
-				.getTransactionByID(extReq.network, channel_genesis_hash, txid)
-				.then((row: { createdt: string | number | Date }) => {
-					if (row) {
-						row.createdt = new Date(row.createdt).toISOString();
-						return res.send({ status: 200, row });
-					}
-				});
-		} else {
-			return requtil.invalidRequest(req, res);
+	router.get(
+		'/transaction/:channel_genesis_hash/:txid',
+		channelResolverMiddleware,
+		(req, res) => {
+			const txid = req.params.txid;
+			const channel_genesis_hash = req.params.channel_genesis_hash;
+			if (txid && txid !== '0' && channel_genesis_hash) {
+				const extReq = (req as unknown) as ExtRequest;
+				dbCrudService
+					.getTransactionByID(extReq.network, channel_genesis_hash, txid)
+					.then((row: { createdt: string | number | Date }) => {
+						if (row) {
+							row.createdt = new Date(row.createdt).toISOString();
+							return res.send({ status: 200, row });
+						}
+					});
+			} else {
+				return requtil.invalidRequest(req, res);
+			}
 		}
-	});
+	);
 
-	router.get('/blockActivity/:channel_genesis_hash', (req, res) => {
-		const channel_genesis_hash = req.params.channel_genesis_hash;
-		if (channel_genesis_hash) {
-			const extReq = (req as unknown) as ExtRequest;
-			dbCrudService
-				.getBlockActivityList(extReq.network, channel_genesis_hash)
-				.then((row: any) => {
-					if (row) {
-						return res.send({ status: 200, row });
-					}
-				});
-		} else {
-			return requtil.invalidRequest(req, res);
+	router.get(
+		'/blockActivity/:channel_genesis_hash',
+		channelResolverMiddleware,
+		(req, res) => {
+			const channel_genesis_hash = req.params.channel_genesis_hash;
+			if (channel_genesis_hash) {
+				const extReq = (req as unknown) as ExtRequest;
+				dbCrudService
+					.getBlockActivityList(extReq.network, channel_genesis_hash)
+					.then((row: any) => {
+						if (row) {
+							return res.send({ status: 200, row });
+						}
+					});
+			} else {
+				return requtil.invalidRequest(req, res);
+			}
 		}
-	});
+	);
 
 	/**
 	 * *
@@ -130,6 +205,7 @@ export function dbroutes(router: Router, platform: Platform) {
 	 */
 	router.get(
 		'/txList/:channel_genesis_hash/:blocknum/:txid',
+		channelResolverMiddleware,
 		async (req, res) => {
 			const channel_genesis_hash = req.params.channel_genesis_hash;
 			const blockNum = parseInt(req.params.blocknum);
@@ -145,18 +221,17 @@ export function dbroutes(router: Router, platform: Platform) {
 			}
 			if (channel_genesis_hash) {
 				const extReq = (req as unknown) as ExtRequest;
-				let data = await dbCrudService
-					.getTxList(
-						extReq.network,
-						channel_genesis_hash,
-						blockNum,
-						txid,
-						from,
-						to,
-						orgs,
-						page,
-						size
-					)
+				let data = await dbCrudService.getTxList(
+					extReq.network,
+					channel_genesis_hash,
+					blockNum,
+					txid,
+					from,
+					to,
+					orgs,
+					page,
+					size
+				);
 				if (data) {
 					return res.send({
 						status: 200,
@@ -185,24 +260,28 @@ export function dbroutes(router: Router, platform: Platform) {
 	 * }
 	 * ]
 	 */
-	router.get('/chaincode/:channel', (req, res) => {
-		const channelName = req.params.channel;
-		if (channelName) {
-			const extReq = (req as unknown) as ExtRequest;
-			dbStatusMetrics.getTxPerChaincode(
-				extReq.network,
-				channelName,
-				async (data: any) => {
-					res.send({
-						status: 200,
-						chaincode: data
-					});
-				}
-			);
-		} else {
-			return requtil.invalidRequest(req, res);
+	router.get(
+		'/chaincode/:channel_genesis_hash',
+		channelResolverMiddleware,
+		(req, res) => {
+			const channel_genesis_hash = req.params.channel_genesis_hash;
+			if (channel_genesis_hash) {
+				const extReq = (req as unknown) as ExtRequest;
+				dbStatusMetrics.getTxPerChaincode(
+					extReq.network,
+					channel_genesis_hash,
+					async (data: any) => {
+						res.send({
+							status: 200,
+							chaincode: data
+						});
+					}
+				);
+			} else {
+				return requtil.invalidRequest(req, res);
+			}
 		}
-	});
+	);
 
 	/**
 	 * *Peer List
@@ -216,21 +295,25 @@ export function dbroutes(router: Router, platform: Platform) {
 	 * }
 	 * ]
 	 */
-	router.get('/peers/:channel_genesis_hash', (req, res) => {
-		const channel_genesis_hash = req.params.channel_genesis_hash;
-		if (channel_genesis_hash) {
-			const extReq = (req as unknown) as ExtRequest;
-			dbStatusMetrics.getPeerList(
-				extReq.network,
-				channel_genesis_hash,
-				(data: any) => {
-					res.send({ status: 200, peers: data });
-				}
-			);
-		} else {
-			return requtil.invalidRequest(req, res);
+	router.get(
+		'/peers/:channel_genesis_hash',
+		channelResolverMiddleware,
+		(req, res) => {
+			const channel_genesis_hash = req.params.channel_genesis_hash;
+			if (channel_genesis_hash) {
+				const extReq = (req as unknown) as ExtRequest;
+				dbStatusMetrics.getPeerList(
+					extReq.network,
+					channel_genesis_hash,
+					(data: any) => {
+						res.send({ status: 200, peers: data });
+					}
+				);
+			} else {
+				return requtil.invalidRequest(req, res);
+			}
 		}
-	});
+	);
 
 	/**
 	 * *
@@ -243,8 +326,14 @@ export function dbroutes(router: Router, platform: Platform) {
 	 * 'createdt':'2018-03-13T15:58:45.000Z','txhash':['6740fb70ed58d5f9c851550e092d08b5e7319b526b5980a984b16bd4934b87ac']}], "noOfpages": 1}
 	 */
 	router.get(
-		'/blockAndTxList/:channel_genesis_hash/:blocknum',
+		'/blocksAndTxList/:channel_genesis_hash/:blocknum',
+		channelResolverMiddleware,
 		async (req, res) => {
+			console.log(`[BlockAndTxList Route] Route handler called`);
+			console.log(`[BlockAndTxList Route] URL: ${req.url}`);
+			console.log(`[BlockAndTxList Route] Params:`, req.params);
+			console.log(`[BlockAndTxList Route] Query:`, req.query);
+
 			const channel_genesis_hash = req.params.channel_genesis_hash;
 			const blockNum = parseInt(req.params.blocknum);
 			const orgs = requtil.parseOrgsArray(req.query);
@@ -253,18 +342,44 @@ export function dbroutes(router: Router, platform: Platform) {
 				req.query.to as string
 			);
 			const { page, size } = req.query;
-			if (channel_genesis_hash ) {
+
+			console.log(
+				`[BlockAndTxList Route] channel_genesis_hash: ${channel_genesis_hash}`
+			);
+			console.log(`[BlockAndTxList Route] blockNum: ${blockNum}`);
+			console.log(`[BlockAndTxList Route] page: ${page}, size: ${size}`);
+
+			if (channel_genesis_hash) {
 				const extReq = (req as unknown) as ExtRequest;
-				let data = await dbCrudService.getBlockAndTxList(
-					extReq.network,
-					channel_genesis_hash,
-					blockNum,
-					from,
-					to,
-					orgs,
-					page,
-					size
+				console.log(
+					`[BlockAndTxList Route] Calling getBlockAndTxList with network: ${extReq.network}`
 				);
+				console.log(
+					`[BlockAndTxList Route] About to call dbCrudService.getBlockAndTxList`
+				);
+				let data;
+				try {
+					data = await dbCrudService.getBlockAndTxList(
+						extReq.network,
+						channel_genesis_hash,
+						blockNum,
+						from,
+						to,
+						orgs,
+						page,
+						size
+					);
+					console.log(
+						`[BlockAndTxList Route] getBlockAndTxList completed successfully`
+					);
+				} catch (error) {
+					console.error(
+						`[BlockAndTxList Route] Error calling getBlockAndTxList:`,
+						error
+					);
+					throw error;
+				}
+				console.log(`[BlockAndTxList Route] Data returned:`, data);
 				if (data) {
 					return res.send({
 						status: 200,
@@ -289,18 +404,22 @@ export function dbroutes(router: Router, platform: Platform) {
 	 * {'datetime':'2018-03-13T17:50:00.000Z','count':'0'},{'datetime':'2018-03-13T17:51:00.000Z','count':'0'},
 	 * {'datetime':'2018-03-13T17:52:00.000Z','count':'0'},{'datetime':'2018-03-13T17:53:00.000Z','count':'0'}]}
 	 */
-	router.get('/txByMinute/:channel_genesis_hash/:hours', (req, res) => {
-		const channel_genesis_hash = req.params.channel_genesis_hash;
-		const hours = parseInt(req.params.hours);
+	router.get(
+		'/txByMinute/:channel_genesis_hash/:hours',
+		channelResolverMiddleware,
+		(req, res) => {
+			const channel_genesis_hash = req.params.channel_genesis_hash;
+			const hours = parseInt(req.params.hours);
 
-		if (channel_genesis_hash && !isNaN(hours)) {
-			const extReq = (req as unknown) as ExtRequest;
-			return dbStatusMetrics
-				.getTxByMinute(extReq.network, channel_genesis_hash, hours)
-				.then(handleResult(req, res));
+			if (channel_genesis_hash && !isNaN(hours)) {
+				const extReq = (req as unknown) as ExtRequest;
+				return dbStatusMetrics
+					.getTxByMinute(extReq.network, channel_genesis_hash, hours)
+					.then(handleResult(req, res));
+			}
+			return requtil.invalidRequest(req, res);
 		}
-		return requtil.invalidRequest(req, res);
-	});
+	);
 
 	/**
 	 * *
@@ -311,18 +430,22 @@ export function dbroutes(router: Router, platform: Platform) {
 	 * {'rows':[{'datetime':'2018-03-12T19:00:00.000Z','count':'0'},
 	 * {'datetime':'2018-03-12T20:00:00.000Z','count':'0'}]}
 	 */
-	router.get('/txByHour/:channel_genesis_hash/:days', (req, res) => {
-		const channel_genesis_hash = req.params.channel_genesis_hash;
-		const days = parseInt(req.params.days);
+	router.get(
+		'/txByHour/:channel_genesis_hash/:days',
+		channelResolverMiddleware,
+		(req, res) => {
+			const channel_genesis_hash = req.params.channel_genesis_hash;
+			const days = parseInt(req.params.days);
 
-		if (channel_genesis_hash && !isNaN(days)) {
-			const extReq = (req as unknown) as ExtRequest;
-			return dbStatusMetrics
-				.getTxByHour(extReq.network, channel_genesis_hash, days)
-				.then(handleResult(req, res));
+			if (channel_genesis_hash && !isNaN(days)) {
+				const extReq = (req as unknown) as ExtRequest;
+				return dbStatusMetrics
+					.getTxByHour(extReq.network, channel_genesis_hash, days)
+					.then(handleResult(req, res));
+			}
+			return requtil.invalidRequest(req, res);
 		}
-		return requtil.invalidRequest(req, res);
-	});
+	);
 
 	/**
 	 * *
@@ -332,18 +455,22 @@ export function dbroutes(router: Router, platform: Platform) {
 	 * Response:
 	 * {'rows':[{'datetime':'2018-03-13T19:59:00.000Z','count':'0'}]}
 	 */
-	router.get('/blocksByMinute/:channel_genesis_hash/:hours', (req, res) => {
-		const channel_genesis_hash = req.params.channel_genesis_hash;
-		const hours = parseInt(req.params.hours);
+	router.get(
+		'/blocksByMinute/:channel_genesis_hash/:hours',
+		channelResolverMiddleware,
+		(req, res) => {
+			const channel_genesis_hash = req.params.channel_genesis_hash;
+			const hours = parseInt(req.params.hours);
 
-		if (channel_genesis_hash && !isNaN(hours)) {
-			const extReq = (req as unknown) as ExtRequest;
-			return dbStatusMetrics
-				.getBlocksByMinute(extReq.network, channel_genesis_hash, hours)
-				.then(handleResult(req, res));
+			if (channel_genesis_hash && !isNaN(hours)) {
+				const extReq = (req as unknown) as ExtRequest;
+				return dbStatusMetrics
+					.getBlocksByMinute(extReq.network, channel_genesis_hash, hours)
+					.then(handleResult(req, res));
+			}
+			return requtil.invalidRequest(req, res);
 		}
-		return requtil.invalidRequest(req, res);
-	});
+	);
 
 	function handleResult(req, res) {
 		return function(rows) {
@@ -362,16 +489,20 @@ export function dbroutes(router: Router, platform: Platform) {
 	 * Response:
 	 * {'rows':[{'datetime':'2018-03-13T20:00:00.000Z','count':'0'}]}
 	 */
-	router.get('/blocksByHour/:channel_genesis_hash/:days', (req, res) => {
-		const channel_genesis_hash = req.params.channel_genesis_hash;
-		const days = parseInt(req.params.days);
+	router.get(
+		'/blocksByHour/:channel_genesis_hash/:days',
+		channelResolverMiddleware,
+		(req, res) => {
+			const channel_genesis_hash = req.params.channel_genesis_hash;
+			const days = parseInt(req.params.days);
 
-		if (channel_genesis_hash && !isNaN(days)) {
-			const extReq = (req as unknown) as ExtRequest;
-			return dbStatusMetrics
-				.getBlocksByHour(extReq.network, channel_genesis_hash, days)
-				.then(handleResult(req, res));
+			if (channel_genesis_hash && !isNaN(days)) {
+				const extReq = (req as unknown) as ExtRequest;
+				return dbStatusMetrics
+					.getBlocksByHour(extReq.network, channel_genesis_hash, days)
+					.then(handleResult(req, res));
+			}
+			return requtil.invalidRequest(req, res);
 		}
-		return requtil.invalidRequest(req, res);
-	});
+	);
 } // End dbroutes()

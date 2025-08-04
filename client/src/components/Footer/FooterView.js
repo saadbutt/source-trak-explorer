@@ -12,23 +12,16 @@ const styles = theme => {
 	const dark = type === 'dark';
 	return {
 		root: {
-			margin: '1rem'
+			margin: '2%'
 		},
 		footer: {
-			backgroundColor: dark ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.95)',
-			backdropFilter: 'blur(10px)',
-			color: dark ? '#e2e8f0' : '#475569',
+			backgroundColor: dark ? '#5e558e' : '#e8e8e8',
+			color: dark ? '#ffffff' : undefined,
 			textAlign: 'center',
 			position: 'fixed',
 			left: 0,
 			right: 0,
-			bottom: 0,
-			padding: '1rem',
-			borderTop: dark ? '1px solid rgba(71, 85, 105, 0.3)' : '1px solid rgba(0, 0, 0, 0.1)',
-			boxShadow: '0 -4px 6px -1px rgba(0, 0, 0, 0.1)',
-			fontFamily: '"Inter", "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif',
-			fontSize: '0.875rem',
-			fontWeight: 500
+			bottom: 0
 		}
 	};
 };

@@ -2,8 +2,7 @@
  *    SPDX-License-Identifier: Apache-2.0
  */
 
-// Always return true to bypass authentication
-export const authSelector = state => true;
+export const authSelector = state => state.auth.token;
 
 export const errorSelector = state => state.auth.error;
 

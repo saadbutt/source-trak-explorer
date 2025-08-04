@@ -51,8 +51,17 @@ export class ChartStats extends Component {
 	}
 
 	componentDidMount() {
+		console.log('ChartStats - componentDidMount called');
+		const { currentChannel } = this.props;
+		console.log('ChartStats - currentChannel:', currentChannel);
+		this.syncData(currentChannel);
+
 		this.interVal = setInterval(() => {
 			const { currentChannel } = this.props;
+			console.log(
+				'ChartStats - Interval syncData with currentChannel:',
+				currentChannel
+			);
 			this.syncData(currentChannel);
 		}, 60000);
 	}
@@ -62,6 +71,7 @@ export class ChartStats extends Component {
 	}
 
 	syncData = currentChannel => {
+		console.log('ChartStats - syncData called with channel:', currentChannel);
 		const {
 			getBlocksPerHour,
 			getBlocksPerMin,
@@ -69,29 +79,53 @@ export class ChartStats extends Component {
 			getTransactionPerMin
 		} = this.props;
 
-		getBlocksPerMin(currentChannel);
-		getBlocksPerHour(currentChannel);
-		getTransactionPerMin(currentChannel);
-		getTransactionPerHour(currentChannel);
+		console.log('ChartStats - Calling chart operations...');
+
+		// Use the correct channel_genesis_hash as fallback
+		const channelToUse =
+			currentChannel && currentChannel !== 'undefined'
+				? currentChannel
+				: 'c8b8fd3ed6e387b5600596a5e2c2c1a6243fea2db161627b3a57d3ca729155ac';
+
+		console.log('ChartStats - Using channel:', channelToUse);
+		getBlocksPerHour(channelToUse);
+		getBlocksPerMin(channelToUse);
+		getTransactionPerMin(channelToUse);
+		getTransactionPerHour(channelToUse);
 	};
 
 	timeDataSetup = (chartData = []) => {
+		console.log('ChartStats - timeDataSetup called with:', chartData);
+
 		let dataMax = 0;
+
+		// Handle empty or null data
+		if (!chartData || chartData.length === 0) {
+			console.log('ChartStats - No data available, returning empty chart');
+			return {
+				displayData: [],
+				dataMax: 10
+			};
+		}
+
 		const displayData = chartData.map(data => {
-			if (parseInt(data.count, 10) > dataMax) {
-				dataMax = parseInt(data.count, 10);
+			const count = parseInt(data.count, 10) || 0;
+			if (count > dataMax) {
+				dataMax = count;
 			}
 
 			return {
 				datetime: moment(data.datetime)
 					.tz(moment.tz.guess())
 					.format('h:mm A'),
-				count: data.count
+				count: count
 			};
 		});
 
-		dataMax += 5;
+		// Ensure we have a minimum range for empty charts
+		dataMax = Math.max(dataMax + 2, 10);
 
+		console.log('ChartStats - Processed chart data:', { displayData, dataMax });
 		return {
 			displayData,
 			dataMax

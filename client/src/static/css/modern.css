@@ -1,0 +1,373 @@
+/**
+ * Modern CSS styles for Hyperledger Fabric Explorer
+ */
+
+/* Import Inter font for better typography */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background: rgba(0, 0, 0, 0.2);
+	border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: rgba(0, 0, 0, 0.3);
+}
+
+/* Dark mode scrollbar */
+.dark-theme ::-webkit-scrollbar-thumb {
+	background: rgba(255, 255, 255, 0.2);
+}
+
+.dark-theme ::-webkit-scrollbar-thumb:hover {
+	background: rgba(255, 255, 255, 0.3);
+}
+
+/* Smooth transitions */
+* {
+	transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* Glass morphism effects */
+.glass-effect {
+	background: rgba(255, 255, 255, 0.1);
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark-theme .glass-effect {
+	background: rgba(0, 0, 0, 0.1);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Gradient backgrounds */
+.gradient-bg {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.gradient-bg-alt {
+	background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+/* Card hover effects */
+.card-hover {
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Button animations */
+.btn-animate {
+	position: relative;
+	overflow: hidden;
+}
+
+.btn-animate::before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 0;
+	height: 0;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.3);
+	transform: translate(-50%, -50%);
+	transition: width 0.6s, height 0.6s;
+}
+
+.btn-animate:hover::before {
+	width: 300px;
+	height: 300px;
+}
+
+/* Loading animations */
+@keyframes pulse {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.5;
+	}
+}
+
+.pulse {
+	animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes shimmer {
+	0% {
+		background-position: -200px 0;
+	}
+	100% {
+		background-position: calc(200px + 100%) 0;
+	}
+}
+
+.shimmer {
+	background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+	background-size: 200px 100%;
+	animation: shimmer 1.5s infinite;
+}
+
+.dark-theme .shimmer {
+	background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
+	background-size: 200px 100%;
+}
+
+/* Status indicators */
+.status-indicator {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	display: inline-block;
+	margin-right: 8px;
+}
+
+.status-online {
+	background-color: #10b981;
+	box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
+.status-offline {
+	background-color: #ef4444;
+	box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+.status-warning {
+	background-color: #f59e0b;
+	box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+}
+
+/* Code blocks */
+.code-block {
+	background: #f8f9fa;
+	border: 1px solid #e9ecef;
+	border-radius: 8px;
+	padding: 16px;
+	font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+	font-size: 14px;
+	line-height: 1.5;
+	overflow-x: auto;
+}
+
+.dark-theme .code-block {
+	background: #1e293b;
+	border-color: #334155;
+	color: #f1f5f9;
+}
+
+/* Hash display */
+.hash-display {
+	font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+	font-size: 12px;
+	color: #64748b;
+	word-break: break-all;
+}
+
+/* Tooltip styles */
+.custom-tooltip {
+	background: rgba(0, 0, 0, 0.9) !important;
+	color: white !important;
+	border-radius: 8px !important;
+	padding: 8px 12px !important;
+	font-size: 12px !important;
+	font-weight: 500 !important;
+}
+
+/* Notification styles */
+.notification {
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	z-index: 9999;
+	max-width: 400px;
+	border-radius: 12px;
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+	animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+	from {
+		transform: translateX(100%);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+	.hide-mobile {
+		display: none !important;
+	}
+
+	.show-mobile {
+		display: block !important;
+	}
+}
+
+@media (min-width: 769px) {
+	.hide-desktop {
+		display: none !important;
+	}
+
+	.show-desktop {
+		display: block !important;
+	}
+}
+
+/* Focus styles for accessibility */
+.focus-visible {
+	outline: 2px solid #3b82f6;
+	outline-offset: 2px;
+}
+
+/* Selection styles */
+::selection {
+	background: rgba(59, 130, 246, 0.2);
+	color: inherit;
+}
+
+.dark-theme ::selection {
+	background: rgba(59, 130, 246, 0.3);
+}
+
+/* Print styles */
+@media print {
+	.no-print {
+		display: none !important;
+	}
+
+	.print-only {
+		display: block !important;
+	}
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+	.card-hover:hover {
+		box-shadow: 0 0 0 2px #000;
+	}
+
+	.status-indicator {
+		border: 1px solid #000;
+	}
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+	* {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+
+	.card-hover:hover {
+		transform: none;
+	}
+}
+
+/* CSS Animations to replace framer-motion */
+@keyframes fadeInUp {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes fadeInLeft {
+	from {
+		opacity: 0;
+		transform: translateX(-20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+/* Component-specific animations */
+.stat-card {
+	animation: fadeInUp 0.5s ease-out;
+}
+
+.chart-card {
+	animation: fadeInUp 0.5s ease-out 0.2s both;
+}
+
+.activity-item {
+	animation: fadeInLeft 0.3s ease-out;
+}
+
+.activity-item:nth-child(1) {
+	animation-delay: 0.1s;
+}
+.activity-item:nth-child(2) {
+	animation-delay: 0.2s;
+}
+.activity-item:nth-child(3) {
+	animation-delay: 0.3s;
+}
+.activity-item:nth-child(4) {
+	animation-delay: 0.4s;
+}
+.activity-item:nth-child(5) {
+	animation-delay: 0.5s;
+}
+
+.simple-data-table {
+	animation: fadeInUp 0.5s ease-out;
+}
+
+.sidebar-logo {
+	animation: fadeInLeft 0.3s ease-out;
+}
+
+.main-content {
+	animation: fadeIn 0.3s ease-out;
+}
+
+/* Hover animations */
+.stat-card:hover {
+	transform: translateY(-2px);
+	transition: transform 0.3s ease;
+}
+
+.chart-card:hover {
+	transform: translateY(-2px);
+	transition: transform 0.3s ease;
+}
+
+.activity-item:hover {
+	transform: translateX(4px);
+	transition: transform 0.2s ease;
+}

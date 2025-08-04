@@ -6,9 +6,14 @@ import actions from './actions';
 import { get } from '../../../services/request';
 
 /* istanbul ignore next */
-const blockPerHour = channelName => dispatch =>
-	get(`/api/blocksByHour/${channelName}/1`)
+const blockPerHour = channelName => dispatch => {
+	console.log(
+		'Chart Operations - blockPerHour called with channel:',
+		channelName
+	);
+	return get(`/api/blocksByHour/${channelName}/1`)
 		.then(resp => {
+			console.log('Chart Operations - blockPerHour response:', resp);
 			if (resp.status === 500) {
 				dispatch(
 					actions.getErroMessage(
@@ -22,8 +27,9 @@ const blockPerHour = channelName => dispatch =>
 			}
 		})
 		.catch(error => {
-			console.error(error);
+			console.error('Chart Operations - blockPerHour error:', error);
 		});
+};
 
 /* istanbul ignore next */
 const blockPerMin = channelName => dispatch =>
@@ -150,7 +156,6 @@ const notification = notificationObj => dispatch => {
 	const notify = JSON.parse(notificationObj);
 	dispatch(actions.getNotification(notify));
 };
-
 
 /* istanbul ignore next */
 const transactionByOrg = channelName => dispatch =>

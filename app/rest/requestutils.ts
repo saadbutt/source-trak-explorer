@@ -106,13 +106,9 @@ export const parseOrgsArray = function(reqQuery: { [key: string]: any }) {
 	}
 };
 
-export const queryDatevalidator = function(from: string, to: string) {
-	if (!isNaN(Date.parse(from)) && !isNaN(Date.parse(to))) {
-		from = new Date(from).toISOString();
-		to = new Date(to).toISOString();
-	} else {
-		from = new Date(Date.now() - 864e5).toISOString();
-		to = new Date().toISOString();
-	}
+export function queryDatevalidator(from: string, to: string) {
+	// If not provided, use a wide range
+	if (!from) from = '1970-01-01';
+	if (!to) to = '2100-01-01';
 	return { from, to };
-};
+}

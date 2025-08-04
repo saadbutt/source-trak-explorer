@@ -29,13 +29,13 @@ import Dialog from '@material-ui/core/Dialog';
 import Loader from 'react-loader-spinner';
 import Select from '../Styled/Select';
 import NotificationsPanel from '../Panels/NotificationsPanel';
-import Logo from '../../static/images/SourceTrak_Logo1.svg';
+import Logo from '../../static/images/Explorer_Logo.png';
 import AdminPanel from '../Panels/AdminPanel';
 import { chartOperations, chartSelectors } from '../../state/redux/charts';
 import { tableOperations, tableSelectors } from '../../state/redux/tables';
 import { themeSelectors } from '../../state/redux/theme';
 import UsersPanal from '../UsersPanal/UsersPanal';
-// Removed authOperations import since authentication is bypassed
+import { authOperations } from '../../state/redux/auth';
 
 // import Enroll from '../Enroll';
 
@@ -90,9 +90,7 @@ const styles = theme => {
 	const { type } = theme.palette;
 	const dark = type === 'dark';
 	const darkNavbar = dark && {
-		background: 'rgba(15, 23, 42, 0.95)',
-		backdropFilter: 'blur(10px)',
-		borderBottom: '1px solid rgba(71, 85, 105, 0.3)'
+		background: 'linear-gradient(to right, rgb(236, 233, 252), #4d4575)'
 	};
 	return {
 		logo: {
@@ -104,46 +102,33 @@ const styles = theme => {
 			}
 		},
 		navbarHeader: {
-			backgroundColor: 'rgba(255, 255, 255, 0.95)',
-			backdropFilter: 'blur(10px)',
-			borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
-			boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+			backgroundColor: '#e8e8e8',
 			...darkNavbar
 		},
 		tab: {
-			color: dark ? '#e2e8f0' : '#475569',
-			fontSize: '1rem',
-			fontWeight: 500,
+			color: dark ? '#242036' : '#000000',
+			fontSize: '1.05rem',
+			fontWeight: 800,
 			height: 50,
-			margin: '0 0.5rem',
-			padding: '0.75rem 1.5rem',
-			borderRadius: '8px',
-			transition: 'all 0.3s ease',
+			margin: 10,
 			'&:hover': {
-				color: dark ? '#0ea5e9' : '#0891b2',
-				backgroundColor: dark ? 'rgba(14, 165, 233, 0.1)' : 'rgba(14, 165, 233, 0.1)',
-				transform: 'translateY(-1px)'
+				color: dark ? '#242036' : '#000000'
 			},
 			'@media (max-width: 1415px) and (min-width: 990px)': {
-				fontSize: '0.875rem',
-				padding: '0.5rem 1rem'
+				fontSize: '0.85rem'
 			}
 		},
 		activeTab: {
 			color: '#ffffff',
-			backgroundColor: dark ? 'rgba(14, 165, 233, 0.2)' : 'linear-gradient(135deg, #0891b2 0%, #0d9488 100%)',
-			background: dark ? 'rgba(14, 165, 233, 0.2)' : 'linear-gradient(135deg, #0891b2 0%, #0d9488 100%)',
-			height: 50,
-			margin: '0 0.5rem',
-			padding: '0.75rem 1.5rem',
-			borderRadius: '8px',
-			boxShadow: '0 2px 4px rgba(14, 165, 233, 0.2)',
+			backgroundColor: dark ? '#453e68' : '#58c5c2',
+			height: 60,
+			marginTop: 20,
+			padding: 10,
 			'&:hover': {
-				color: '#ffffff',
-				transform: 'translateY(-1px)'
+				color: '#ffffff'
 			},
 			'@media (max-width: 1415px) and (min-width: 990px)': {
-				padding: '0.5rem 1rem'
+				padding: '8%'
 			}
 		},
 		adminButton: {
@@ -151,18 +136,26 @@ const styles = theme => {
 			marginTop: 0
 		},
 		themeSwitch: {
+			// height: 50,
+			// lineHeight: '50px',
 			textAlign: 'center',
 			margin: '0 8px 8px 8px'
+			// width: 100,
+			// paddingTop: 0,
+			// '@media (max-width: 1415px) and (min-width: 990px)': {
+			// 	display: 'flex'
+			// },
+			// '@media (max-width: 990px)': {
+			// 	marginLeft: 0
+			// }
 		},
 		bell: {
-			color: dark ? '#94a3b8' : '#5f6164',
+			color: dark ? 'rgb(139, 143, 148)' : '#5f6164',
 			fontSize: '18pt',
 			margin: '8px',
 			float: 'none',
-			transition: 'all 0.3s ease',
 			'&:hover': {
-				color: dark ? '#0ea5e9' : '#0891b2',
-				transform: 'scale(1.1)'
+				color: dark ? '#c1d7f0' : '#24272a'
 			},
 			paddingLeft: '12px'
 		},
@@ -209,7 +202,20 @@ const styles = theme => {
 			},
 			fontSize: '18pt'
 		},
-		// Removed logout styles since authentication is bypassed
+		logout: {
+			fontSize: '18pt',
+			margin: 8
+		},
+		logoutIcon: {
+			color: dark ? 'rgb(139, 143, 148)' : '#5f6164',
+			fontSize: '16pt',
+			float: 'none',
+			'&:hover': {
+				color: dark ? '#c1d7f0' : '#24272a'
+			},
+			margin: '8px',
+			cursor: 'pointer'
+		},
 		userIcon: {
 			color: dark ? 'rgb(139, 143, 148)' : '#5f6164',
 			fontSize: '16pt',
@@ -252,23 +258,18 @@ export class HeaderView extends Component {
 		const { channels: channelArr, currentChannel } = this.props;
 		const arr = [];
 		let selectedValue = {};
-		
-		// Add null check to prevent forEach error when channels is undefined
-		if (channelArr && Array.isArray(channelArr)) {
-			channelArr.forEach(element => {
-				if (element.channel_genesis_hash === currentChannel) {
-					selectedValue = {
-						value: element.channel_genesis_hash,
-						label: element.channelname
-					};
-				}
-				arr.push({
+		channelArr.forEach(element => {
+			if (element.channel_genesis_hash === currentChannel) {
+				selectedValue = {
 					value: element.channel_genesis_hash,
 					label: element.channelname
-				});
+				};
+			}
+			arr.push({
+				value: element.channel_genesis_hash,
+				label: element.channelname
 			});
-		}
-		
+		});
 		this.setState({
 			currentChannel: currentChannel,
 			channels: arr,
@@ -276,12 +277,9 @@ export class HeaderView extends Component {
 			selectedChannel: selectedValue
 		});
 
-		// Only set up interval if we have a valid channel
-		if (currentChannel) {
-			this.interVal = setInterval(() => {
-				this.syncData(currentChannel);
-			}, 60000);
-		}
+		this.interVal = setInterval(() => {
+			this.syncData(currentChannel);
+		}, 60000);
 	}
 
 	componentWillUnmount() {
@@ -292,9 +290,7 @@ export class HeaderView extends Component {
 		const { currentChannel, getChangeChannel } = this.props;
 		const options = [];
 		let selectedValue = {};
-		
-		// Add null check to prevent forEach error when channels is undefined
-		if (nextProps.channels && Array.isArray(nextProps.channels) && nextProps.channels.length > 0) {
+		if (nextProps.channels.length > 0) {
 			nextProps.channels.forEach(element => {
 				options.push({
 					value: element.channel_genesis_hash,
@@ -393,7 +389,12 @@ export class HeaderView extends Component {
 		this.registerClose();
 	};
 
-	// Removed logout functionality since authentication is bypassed
+	logout = async () => {
+		const result = await this.props.logout();
+		if (result.status === 'Success') {
+			window.location = '/';
+		}
+	};
 
 	/**enrollOpen = () => {
     this.setState(() => ({ enrollOpen: true }));
@@ -537,12 +538,13 @@ export class HeaderView extends Component {
 
 		return (
 			<div>
-				{/* WebSocket disabled since backend platform is disabled */}
-				{/* <Websocket
+				{/* production */}
+				{/* development */}
+				<Websocket
 					url={webSocketUrl}
 					onMessage={this.handleData.bind(this)}
 					reconnect
-				/> */}
+				/>
 				<Router>
 					<div>
 						<Navbar className={classes.navbarHeader} expand="lg" fixed="top">
@@ -615,7 +617,21 @@ export class HeaderView extends Component {
 														<FontAwesome name="moon-o" className={classes.moonIcon} />
 													</div>
 												</DropdownItem>
-
+												<DropdownItem>
+													<div
+														className={classes.userIcon}
+														onClick={() => this.registerOpen()}
+													>
+														<FontAwesome name="user-plus" />
+														User management
+													</div>
+												</DropdownItem>
+												<DropdownItem divider />
+												<DropdownItem>
+													<div className={classes.logoutIcon} onClick={() => this.logout()}>
+														<FontAwesome name="sign-out" /> Sign out
+													</div>
+												</DropdownItem>
 											</DropdownMenu>
 										</Dropdown>
 									</Form>
@@ -718,8 +734,8 @@ const mapDispatchToProps = {
 	getTransactionList: transactionList,
 	getTransactionListSearch: transactionListSearch,
 	getTransactionPerHour: transactionPerHour,
-	getTransactionPerMin: transactionPerMin
-	// Removed logout mapping since authentication is bypassed
+	getTransactionPerMin: transactionPerMin,
+	logout: authOperations.logout
 };
 
 const connectedComponent = connect(

@@ -83,16 +83,13 @@ export class OrgPieChart extends Component {
 
 	orgDataSetup = orgData => {
 		const temp = [];
-		// Add null check to prevent forEach error when orgData is undefined
-		if (orgData && Array.isArray(orgData)) {
-			orgData.forEach(element => {
-				temp.push({
-					value: parseInt(element.count, 10),
-					name: element.creator_msp_id,
-					fill: getOrgColor(element.creator_msp_id)
-				});
+		orgData.forEach(element => {
+			temp.push({
+				value: parseInt(element.count, 10),
+				name: element.creator_msp_id,
+				fill: getOrgColor(element.creator_msp_id)
 			});
-		}
+		});
 		this.setState({ data: temp });
 	};
 

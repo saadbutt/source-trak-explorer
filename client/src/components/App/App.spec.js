@@ -36,22 +36,23 @@ describe('App', () => {
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	test('Header should always render since authentication is bypassed', () => {
+	test('if loading is false Header should render', () => {
 		const { wrapper } = setup();
+		wrapper.setProps({ auth: true });
 		wrapper.setState({ loading: false });
 		wrapper.update();
 		expect(wrapper.find(Header).exists()).toBe(true);
 	});
 
-	test('Header renders regardless of auth prop since authentication is bypassed', () => {
+	test('if auth is falsey Header should not render', () => {
 		const { wrapper } = setup();
 		wrapper.setProps({ auth: false });
 		wrapper.setState({ loading: false });
 		wrapper.update();
-		expect(wrapper.find(Header).exists()).toBe(true);
+		expect(wrapper.find(Header).exists()).toBe(false);
 	});
 
-	test('Header renders when auth prop is true', () => {
+	test('if auth is truthy Header should render', () => {
 		const { wrapper } = setup();
 		wrapper.setProps({ auth: true });
 		wrapper.setState({ loading: false });

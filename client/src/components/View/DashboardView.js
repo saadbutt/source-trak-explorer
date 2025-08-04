@@ -8,7 +8,7 @@ import { Row, Col } from 'reactstrap';
 import FontAwesome from 'react-fontawesome';
 import Card from '@material-ui/core/Card';
 import Avatar from '@material-ui/core/Avatar';
-import ChartStats from '../Charts/ChartStats';
+import TestCharts from '../Charts/TestCharts';
 import PeersHealth from '../Lists/PeersHealth';
 import TimelineStream from '../Lists/TimelineStream';
 import OrgPieChart from '../Charts/OrgPieChart';
@@ -35,7 +35,7 @@ const styles = theme => {
 	const dark = type === 'dark';
 	return {
 		background: {
-			backgroundColor: dark ? 'rgb(36, 32, 54)' : '#0000'
+			backgroundColor: dark ? 'rgb(36, 32, 54)' : '#f0f5f9'
 		},
 		view: {
 			paddingTop: 85,
@@ -333,23 +333,10 @@ export class DashboardView extends Component {
 							<Card className={classes.section}>
 								<PeersHealth peerStatus={peerList} />
 							</Card>
-							<Card className={classes.section}>
-								<TimelineStream
-									notifications={notifications}
-									blockList={blockActivity}
-								/>
-							</Card>
 						</Col>
 						<Col sm="6">
 							<Card className={classes.section}>
-								<ChartStats />
-							</Card>
-							<Card className={`${classes.section} ${classes.center}`}>
-								<h5>Transactions by Organization</h5>
-								<hr />
-								<div className={classes.pie}>
-									<OrgPieChart transactionByOrg={transactionByOrg} />
-								</div>
+								<TestCharts />
 							</Card>
 						</Col>
 					</Row>

@@ -64,7 +64,7 @@ describe('Selectors', () => {
 	test('Auth Selector', () => {
 		const state = { auth: { token: 'test' } };
 		const AuthSelector = selectors.authSelector(state);
-		expect(AuthSelector).toBe(true); // Always returns true since authentication is bypassed
+		expect(AuthSelector).toBe('test');
 	});
 
 	test('Error Selector', () => {

@@ -342,10 +342,29 @@ export class MetricService {
           group by 1
           order by 1 `;
 
-		return this.sql.getRowsBySQlQuery(sqlPerMinute, [
-			channel_genesis_hash,
-			network_name
-		]);
+		// For demo purposes, if no transactions found in current time, look for transactions in the past
+		return this.sql
+			.getRowsBySQlQuery(sqlPerMinute, [channel_genesis_hash, network_name])
+			.then((result: any) => {
+				// If all counts are 0, try to get actual transaction data from the past
+				const hasData = result.some((row: any) => parseInt(row.count) > 0);
+				if (!hasData) {
+					// Return actual transaction data from the past for demo
+					const demoSql = `SELECT 
+					date_trunc('min', createdt) as datetime,
+					count(*) as count
+				FROM TRANSACTIONS 
+				WHERE channel_genesis_hash=$1 AND network_name=$2 
+				GROUP BY date_trunc('min', createdt)
+				ORDER BY datetime ASC
+				LIMIT 60`;
+					return this.sql.getRowsBySQlQuery(demoSql, [
+						channel_genesis_hash,
+						network_name
+					]);
+				}
+				return result;
+			});
 	}
 
 	/**
@@ -372,11 +391,29 @@ export class MetricService {
           group by 1
           order by 1 `;
 
-		return this.sql.getRowsBySQlQuery(sqlPerHour, [
-			day,
-			channel_genesis_hash,
-			network_name
-		]);
+		// For demo purposes, if no transactions found in current time, look for transactions in the past
+		return this.sql
+			.getRowsBySQlQuery(sqlPerHour, [day, channel_genesis_hash, network_name])
+			.then((result: any) => {
+				// If all counts are 0, try to get actual transaction data from the past
+				const hasData = result.some((row: any) => parseInt(row.count) > 0);
+				if (!hasData) {
+					// Return actual transaction data from the past for demo
+					const demoSql = `SELECT 
+					date_trunc('hour', createdt) as datetime,
+					count(*) as count
+				FROM TRANSACTIONS 
+				WHERE channel_genesis_hash=$1 AND network_name=$2 
+				GROUP BY date_trunc('hour', createdt)
+				ORDER BY datetime ASC
+				LIMIT 24`;
+					return this.sql.getRowsBySQlQuery(demoSql, [
+						channel_genesis_hash,
+						network_name
+					]);
+				}
+				return result;
+			});
 	}
 
 	/**
@@ -529,11 +566,29 @@ export class MetricService {
           group by 1
           order by 1  `;
 
-		return this.sql.getRowsBySQlQuery(sqlPerMinute, [
-			hours,
-			channel_genesis_hash,
-			network_name
-		]);
+		// For demo purposes, if no blocks found in current time, look for blocks in the past
+		return this.sql
+			.getRowsBySQlQuery(sqlPerMinute, [hours, channel_genesis_hash, network_name])
+			.then((result: any) => {
+				// If all counts are 0, try to get actual block data from the past
+				const hasData = result.some((row: any) => parseInt(row.count) > 0);
+				if (!hasData) {
+					// Return actual block data from the past for demo
+					const demoSql = `SELECT 
+					date_trunc('min', createdt) as datetime,
+					count(*) as count
+				FROM BLOCKS 
+				WHERE channel_genesis_hash=$1 AND network_name=$2 
+				GROUP BY date_trunc('min', createdt)
+				ORDER BY datetime ASC
+				LIMIT 60`;
+					return this.sql.getRowsBySQlQuery(demoSql, [
+						channel_genesis_hash,
+						network_name
+					]);
+				}
+				return result;
+			});
 	}
 
 	/**
@@ -560,11 +615,29 @@ export class MetricService {
           group by 1
           order by 1 `;
 
-		return this.sql.getRowsBySQlQuery(sqlPerHour, [
-			days,
-			channel_genesis_hash,
-			network_name
-		]);
+		// For demo purposes, if no blocks found in current time, look for blocks in the past
+		return this.sql
+			.getRowsBySQlQuery(sqlPerHour, [days, channel_genesis_hash, network_name])
+			.then((result: any) => {
+				// If all counts are 0, try to get actual block data from the past
+				const hasData = result.some((row: any) => parseInt(row.count) > 0);
+				if (!hasData) {
+					// Return actual block data from the past for demo
+					const demoSql = `SELECT 
+					date_trunc('hour', createdt) as datetime,
+					count(*) as count
+				FROM BLOCKS 
+				WHERE channel_genesis_hash=$1 AND network_name=$2 
+				GROUP BY date_trunc('hour', createdt)
+				ORDER BY datetime ASC
+				LIMIT 24`;
+					return this.sql.getRowsBySQlQuery(demoSql, [
+						channel_genesis_hash,
+						network_name
+					]);
+				}
+				return result;
+			});
 	}
 
 	/**
