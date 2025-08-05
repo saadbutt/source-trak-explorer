@@ -112,14 +112,24 @@ export class PgService {
 	 */
 	async handleDisconnect() {
 		try {
+			// Check if client is already connected
+			if (this.client.connection && this.client.connection.stream && !this.client.connection.stream.destroyed) {
+				logger.debug('Client is already connected, skipping reconnection');
+				return;
+			}
+
 			this.client.on('error', (err: NodeJS.ErrnoException) => {
 				logger.error('db error', err);
 				if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-					this.handleDisconnect();
+					// Only attempt reconnection if not already connected
+					if (!this.client.connection || this.client.connection.stream.destroyed) {
+						setTimeout(() => this.handleDisconnect(), 2000);
+					}
 				} else {
 					throw err;
 				}
 			});
+			
 			await this.client.connect();
 		} catch (err) {
 			if (err) {
@@ -129,7 +139,10 @@ export class PgService {
 				 * Process asynchronous requests in the meantime.
 				 */
 				logger.error('error when connecting to db:', err);
-				setTimeout(() => this.handleDisconnect(), 2000);
+				// Only retry if the error is not about already being connected
+				if (err instanceof Error && err.message !== 'Client has already been connected. You cannot reuse a client.') {
+					setTimeout(() => this.handleDisconnect(), 2000);
+				}
 			}
 		}
 	}
@@ -140,7 +153,16 @@ export class PgService {
 	 * @memberof PgService
 	 */
 	openconnection() {
-		this.client.connect();
+		try {
+			// Check if client is already connected
+			if (this.client.connection && this.client.connection.stream && !this.client.connection.stream.destroyed) {
+				logger.debug('Client is already connected, skipping connection');
+				return;
+			}
+			this.client.connect();
+		} catch (err) {
+			logger.error('Error in openconnection:', err);
+		}
 	}
 
 	/**
