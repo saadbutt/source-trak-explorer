@@ -1,59 +1,53 @@
 
 # SPDX-License-Identifier: Apache-2.0
-version: '2.1'
+version: '3.8'
 
 volumes:
-  pgdata:
-  walletstore:
+  postgres_data:
 
 networks:
-  mynetwork.com:
-    name: fabric_test
+  explorer-network:
+    driver: bridge
 
 services:
-
-  explorerdb.mynetwork.com:
-    image: ghcr.io/hyperledger-labs/explorer-db:latest
-    container_name: explorerdb.mynetwork.com
-    hostname: explorerdb.mynetwork.com
+  postgres:
+    image: postgres:13-alpine
+    container_name: postgres
     environment:
-      - DATABASE_DATABASE=fabricexplorer
-      - DATABASE_USERNAME=hppoc
-      - DATABASE_PASSWORD=password
-    healthcheck:
-      test: "pg_isready -h localhost -p 5432 -q -U postgres"
-      interval: 30s
-      timeout: 10s
-      retries: 5
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    networks:
-      - mynetwork.com
-
-  explorer.mynetwork.com:
-    image: ghcr.io/hyperledger-labs/explorer:latest
-    container_name: explorer.mynetwork.com
-    hostname: explorer.mynetwork.com
-    environment:
-      - DATABASE_HOST=explorerdb.mynetwork.com
-      - DATABASE_DATABASE=fabricexplorer
-      - DATABASE_USERNAME=hppoc
-      - DATABASE_PASSWD=password
-      - LOG_LEVEL_APP=info
-      - LOG_LEVEL_DB=info
-      - LOG_LEVEL_CONSOLE=debug
-      - LOG_CONSOLE_STDOUT=true
-      - DISCOVERY_AS_LOCALHOST=false
-      - PORT=${PORT:-8080}
-    volumes:
-      - ${EXPLORER_CONFIG_FILE_PATH}:/opt/explorer/app/platform/fabric/config.json
-      - ${EXPLORER_PROFILE_DIR_PATH}:/opt/explorer/app/platform/fabric/connection-profile
-      - ${FABRIC_CRYPTO_PATH}:/tmp/crypto
-      - walletstore:/opt/explorer/wallet
+      POSTGRES_DB: fabricexplorer
+      POSTGRES_USER: hppoc
+      POSTGRES_PASSWORD: password
     ports:
-      - ${PORT:-8080}:${PORT:-8080}
-    depends_on:
-      explorerdb.mynetwork.com:
-        condition: service_healthy
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     networks:
-      - mynetwork.com
+      - explorer-network
+
+  explorer:
+    build: .
+    container_name: hyperledger-explorer
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: fabricexplorer
+      DATABASE_USERNAME: hppoc
+      DATABASE_PASSWD: password
+      EXPLORER_APP_ROOT: app
+      LOG_LEVEL_APP: debug
+      LOG_LEVEL_DB: debug
+      LOG_LEVEL_CONSOLE: info
+      LOG_CONSOLE_STDOUT: false
+      DISCOVERY_AS_LOCALHOST: true
+      PORT: 8080
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./logs:/opt/explorer/logs
+      - ./app/platform/fabric/connection-profile:/opt/explorer/app/platform/fabric/connection-profile
+      - ./wallet:/opt/explorer/wallet
+    networks:
+      - explorer-network
+    restart: unless-stopped
