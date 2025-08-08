@@ -278,7 +278,7 @@ const BlocksView = ({
                     color="text.secondary"
                     gutterBottom
                   >
-                    Data Hash
+                    Block Hash
                   </Typography>
                   <Typography
                     variant="body2"
@@ -288,7 +288,7 @@ const BlocksView = ({
                       wordBreak: 'break-all'
                     }}
                   >
-                    {selectedBlock.datahash}
+                    {selectedBlock.blockhash}
                   </Typography>
 
                   <Typography
