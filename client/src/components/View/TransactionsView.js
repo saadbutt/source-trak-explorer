@@ -117,9 +117,8 @@ const TransactionsView = ({
 	// Get total transactions from dashboard stats (accurate count from database)
 	const totalTransactions = dashStats.txCount || 0;
 	
-	// Get latest block number (second block in the list, index 1, or first if only one exists)
-	const latestBlockNum = blockListSearch.length > 1 ? blockListSearch[1].blocknum : 
-	                       blockListSearch.length > 0 ? blockListSearch[0].blocknum : 0;
+	// Get latest block number (first block in the list, index 0, since blocks are ordered by blocknum desc)
+	const latestBlockNum = blockListSearch.length > 0 ? blockListSearch[0].blocknum : 0;
 
 	const stats = [
 		{

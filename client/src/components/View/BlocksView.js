@@ -110,21 +110,11 @@ const BlocksView = ({
   // Note: dashStats.latestBlock is actually the total block count
   const totalBlocks = dashStats.latestBlock || dashStats.blockCount || 0;
 
-  // Get latest block number (second block in the list, index 1, or first if only one exists)
-  const latestBlockNum =
-    blockListSearch.length > 1
-      ? blockListSearch[1].blocknum
-      : blockListSearch.length > 0
-      ? blockListSearch[0].blocknum
-      : 0;
+  // Get latest block number (first block in the list, index 0, since blocks are ordered by blocknum desc)
+  const latestBlockNum = blockListSearch.length > 0 ? blockListSearch[0].blocknum : 0;
 
-  // Get latest block hash (second block's hash, or first if only one exists)
-  const latestBlockHash =
-    blockListSearch.length > 1
-      ? blockListSearch[1].blockhash
-      : blockListSearch.length > 0
-      ? blockListSearch[0].blockhash
-      : 'N/A';
+  // Get latest block hash (first block's hash, since blocks are ordered by blocknum desc)
+  const latestBlockHash = blockListSearch.length > 0 ? blockListSearch[0].blockhash : 'N/A';
 
   const stats = [
     {
