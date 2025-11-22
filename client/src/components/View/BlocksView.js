@@ -15,16 +15,20 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  IconButton
+  IconButton,
+  Tooltip
 } from '@mui/material';
-import { Block, Receipt, Timer, Close } from '@mui/icons-material';
+import { Block, Timer, Close, Fingerprint } from '@mui/icons-material';
 import SimpleDataTable from '../DataTable/SimpleDataTable';
 import { tableSelectors, tableOperations } from '../../state/redux/tables';
+import { chartOperations, chartSelectors } from '../../state/redux/charts';
 
 const BlocksView = ({
   blockListSearch = [],
   loading = false,
   getBlockListSearch,
+  dashStats = {},
+  dashStatsOperation,
   currentChannel = 'mychannel'
 }) => {
   const [selectedBlock, setSelectedBlock] = useState(null);
@@ -32,8 +36,9 @@ const BlocksView = ({
   useEffect(() => {
     if (currentChannel) {
       getBlockListSearch(currentChannel, '', { page: 1, size: 100 });
+      dashStatsOperation(currentChannel);
     }
-  }, [getBlockListSearch, currentChannel]);
+  }, [getBlockListSearch, dashStatsOperation, currentChannel]);
 
   const blockColumns = [
     {
@@ -101,27 +106,48 @@ const BlocksView = ({
     }
   };
 
+  // Get total blocks from dashboard stats (accurate count from database)
+  // Note: dashStats.latestBlock is actually the total block count
+  const totalBlocks = dashStats.latestBlock || dashStats.blockCount || 0;
+
+  // Get latest block number (second block in the list, index 1, or first if only one exists)
+  const latestBlockNum =
+    blockListSearch.length > 1
+      ? blockListSearch[1].blocknum
+      : blockListSearch.length > 0
+      ? blockListSearch[0].blocknum
+      : 0;
+
+  // Get latest block hash (second block's hash, or first if only one exists)
+  const latestBlockHash =
+    blockListSearch.length > 1
+      ? blockListSearch[1].blockhash
+      : blockListSearch.length > 0
+      ? blockListSearch[0].blockhash
+      : 'N/A';
+
   const stats = [
     {
       title: 'Total Blocks',
-      value: blockListSearch.length || 0,
+      value: totalBlocks,
       icon: <Block />,
       color: '#3b82f6'
     },
     {
-      title: 'Total Transactions',
-      value: blockListSearch.reduce(
-        (sum, block) => sum + (block.txcount || 0),
-        0
-      ),
-      icon: <Receipt />,
-      color: '#10b981'
-    },
-    {
       title: 'Latest Block',
-      value: blockListSearch.length > 0 ? blockListSearch[0].blocknum : 0,
+      value: latestBlockNum,
       icon: <Timer />,
       color: '#f59e0b'
+    },
+    {
+      title: 'Latest Block Hash',
+      value:
+        latestBlockHash !== 'N/A'
+          ? `${latestBlockHash.substring(0, 16)}...`
+          : 'N/A',
+      icon: <Fingerprint />,
+      color: '#10b981',
+      fullValue: latestBlockHash // Store full value for display
     }
   ];
 
@@ -174,7 +200,13 @@ const BlocksView = ({
                     </Box>
                     <Box>
                       <Typography variant="h4" sx={{ fontWeight: 700 }}>
-                        {stat.value.toLocaleString()}
+                        {stat.fullValue ? (
+                          <Tooltip title={stat.fullValue}>
+                            <span>{stat.value}</span>
+                          </Tooltip>
+                        ) : (
+                          stat.value.toLocaleString()
+                        )}
                       </Typography>
                       <Typography
                         variant="body2"
@@ -323,14 +355,18 @@ const BlocksView = ({
 
 const { blockListSearchSelector } = tableSelectors;
 const { blockListSearch } = tableOperations;
+const { dashStatsSelector } = chartSelectors;
+const { dashStats } = chartOperations;
 
 const mapStateToProps = state => ({
   blockListSearch: blockListSearchSelector(state),
+  dashStats: dashStatsSelector(state) || {},
   loading: false // Add proper loading selector
 });
 
 const mapDispatchToProps = {
-  getBlockListSearch: blockListSearch
+  getBlockListSearch: blockListSearch,
+  dashStatsOperation: dashStats
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BlocksView);
