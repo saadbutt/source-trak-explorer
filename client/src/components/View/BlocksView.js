@@ -136,7 +136,7 @@ const BlocksView = ({
     {
       title: 'Latest Block',
       value: latestBlockNum,
-      icon: <Timer />,
+      icon: <Block />,
       color: '#f59e0b'
     },
     {

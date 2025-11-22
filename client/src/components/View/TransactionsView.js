@@ -18,22 +18,29 @@ import {
 	Button,
 	IconButton
 } from '@mui/material';
-import { Receipt, TrendingUp, Timer, Close } from '@mui/icons-material';
+import { Receipt, Timer, Close, Block } from '@mui/icons-material';
 import { tableSelectors, tableOperations } from '../../state/redux/tables';
+import { chartOperations, chartSelectors } from '../../state/redux/charts';
 import SimpleDataTable from '../DataTable/SimpleDataTable';
 
 const TransactionsView = ({
 	transactionList = [],
+	blockListSearch = [],
 	loading = false,
 	getTransactionList,
+	getBlockListSearch,
+	dashStats = {},
+	dashStatsOperation,
 	currentChannel = 'mychannel'
 }) => {
 	const [selectedTransaction, setSelectedTransaction] = useState(null);
 	useEffect(() => {
 		if (currentChannel) {
 			getTransactionList(currentChannel, { page: 1, size: 100 });
+			getBlockListSearch(currentChannel, '', { page: 1, size: 2 }); // Get first 2 blocks to find latest
+			dashStatsOperation(currentChannel);
 		}
-	}, [getTransactionList, currentChannel]);
+	}, [getTransactionList, getBlockListSearch, dashStatsOperation, currentChannel]);
 
 	const transactionColumns = [
 		{
@@ -102,20 +109,29 @@ const TransactionsView = ({
 	const handleRefresh = () => {
 		if (currentChannel) {
 			getTransactionList(currentChannel, { page: 1, size: 100 });
+			getBlockListSearch(currentChannel, '', { page: 1, size: 2 });
+			dashStatsOperation(currentChannel);
 		}
 	};
+
+	// Get total transactions from dashboard stats (accurate count from database)
+	const totalTransactions = dashStats.txCount || 0;
+	
+	// Get latest block number (second block in the list, index 1, or first if only one exists)
+	const latestBlockNum = blockListSearch.length > 1 ? blockListSearch[1].blocknum : 
+	                       blockListSearch.length > 0 ? blockListSearch[0].blocknum : 0;
 
 	const stats = [
 		{
 			title: 'Total Transactions',
-			value: transactionList.length || 0,
+			value: totalTransactions,
 			icon: <Receipt />,
 			color: '#3b82f6'
 		},
 		{
-			title: 'Valid Transactions',
-			value: transactionList.filter(tx => tx.status === 'VALID').length || 0,
-			icon: <TrendingUp />,
+			title: 'Latest Block',
+			value: latestBlockNum,
+			icon: <Block />,
 			color: '#10b981'
 		},
 		{
@@ -288,16 +304,22 @@ const TransactionsView = ({
 	);
 };
 
-const { transactionListSelector } = tableSelectors;
-const { transactionList } = tableOperations;
+const { transactionListSelector, blockListSearchSelector } = tableSelectors;
+const { transactionList, blockListSearch } = tableOperations;
+const { dashStatsSelector } = chartSelectors;
+const { dashStats } = chartOperations;
 
 const mapStateToProps = state => ({
 	transactionList: transactionListSelector(state),
+	blockListSearch: blockListSearchSelector(state),
+	dashStats: dashStatsSelector(state) || {},
 	loading: false // Add proper loading selector
 });
 
 const mapDispatchToProps = {
-	getTransactionList: transactionList
+	getTransactionList: transactionList,
+	getBlockListSearch: blockListSearch,
+	dashStatsOperation: dashStats
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TransactionsView);
