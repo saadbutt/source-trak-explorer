@@ -18,7 +18,7 @@ import {
   IconButton,
   Tooltip
 } from '@mui/material';
-import { Block, Timer, Close, Fingerprint } from '@mui/icons-material';
+import { Block, Timer, Close, Code, ViewInAr } from '@mui/icons-material';
 import SimpleDataTable from '../DataTable/SimpleDataTable';
 import { tableSelectors, tableOperations } from '../../state/redux/tables';
 import { chartOperations, chartSelectors } from '../../state/redux/charts';
@@ -120,13 +120,13 @@ const BlocksView = ({
     {
       title: 'Total Blocks',
       value: totalBlocks,
-      icon: <Block />,
+      icon: <ViewInAr />,
       color: '#3b82f6'
     },
     {
-      title: 'Latest Block',
+      title: 'Latest Block ID',
       value: latestBlockNum,
-      icon: <Block />,
+      icon: <ViewInAr />,
       color: '#f59e0b'
     },
     {
@@ -135,7 +135,7 @@ const BlocksView = ({
         latestBlockHash !== 'N/A'
           ? `${latestBlockHash.substring(0, 16)}...`
           : 'N/A',
-      icon: <Fingerprint />,
+      icon: <Code />,
       color: '#10b981',
       fullValue: latestBlockHash // Store full value for display
     }

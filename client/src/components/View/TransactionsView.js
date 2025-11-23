@@ -18,7 +18,7 @@ import {
 	Button,
 	IconButton
 } from '@mui/material';
-import { Receipt, Timer, Close, Block } from '@mui/icons-material';
+import { Receipt, Timer, Close, ViewInAr, Code } from '@mui/icons-material';
 import { tableSelectors, tableOperations } from '../../state/redux/tables';
 import { chartOperations, chartSelectors } from '../../state/redux/charts';
 import SimpleDataTable from '../DataTable/SimpleDataTable';
@@ -128,18 +128,18 @@ const TransactionsView = ({
 			color: '#3b82f6'
 		},
 		{
-			title: 'Latest Block',
+			title: 'Latest Block ID',
 			value: latestBlockNum,
-			icon: <Block />,
+			icon: <ViewInAr />,
 			color: '#10b981'
 		},
 		{
-			title: 'Latest Transaction',
+			title: 'Latest Transaction Hash',
 			value:
 				transactionList.length > 0
 					? transactionList[0].txhash?.substring(0, 8)
 					: 'N/A',
-			icon: <Timer />,
+			icon: <Code />,
 			color: '#f59e0b'
 		}
 	];
